@@ -31,7 +31,7 @@ public class Game extends JFrame {
         this.modifyRandomTank(this.player1.getTank(), this.player2.getTank());
         this.everything.add(this.player1.getTank());
         this.everything.add(this.player2.getTank());
-        this.map = new Map(MapLevel.EASY);
+        this.map = new Map(MapLevel.HARD); //WILL BE EDITED
     }
 
     void modifyRandomTank(Tank lostTank, Tank wonTank) {
@@ -171,6 +171,7 @@ public class Game extends JFrame {
 
     public void paint(Graphics graphics) {
         super.paint(graphics);
+        map.draw(graphics);
         this.everything.forEach((thing) -> thing.draw(graphics));
         this.shotsInTheAir.forEach((shot) -> shot.draw(graphics));
         graphics.drawString(this.player1.point + " - " + this.player2.point, 350, 680);
