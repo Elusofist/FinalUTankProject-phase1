@@ -22,6 +22,7 @@ public class Game extends JFrame {
     boolean prevP2Fire = false;
     boolean p1Won = false;
     boolean p2Won = false;
+    Map map = new Map();
 
     Game() {
         this.setSize(WIDTH, HEIGHT);
@@ -116,6 +117,12 @@ public class Game extends JFrame {
                 this.everything.add(this.player2.getTank());
                 this.player1.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
             }
+
+            for (Wall wall : map.walls) {
+                if (wall.contacts(shot)) {
+                    shot.bounceAgainst(wall);
+                }
+            }
         }
     }
 
@@ -168,11 +175,11 @@ public class Game extends JFrame {
         graphics.drawString(this.player1.point + " - " + this.player2.point, 350, 680);
 
         if (this.p1Won) {
-            graphics.drawString("Player 1 won!", 320, 360);
+            graphics.drawString("Player 1 won!", 370, 400);
         }
 
         if (this.p2Won) {
-            graphics.drawString("Player 2 won!", 320, 360);
+            graphics.drawString("Player 2 won!", 370, 400);
         }
 
         Toolkit.getDefaultToolkit().sync();

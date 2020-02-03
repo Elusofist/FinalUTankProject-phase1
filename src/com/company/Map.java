@@ -82,21 +82,19 @@ class Map{
         walls.add(new Wall(700, 300, 100, true));
     }
 
-    void chooseMap(MapLevel map, Graphics graphics) {
-        switch (map) {
+    void chooseMap(MapLevel level, Graphics graphics) {
+        switch (level) {
             case EASY:
                 easyMapDesigner(walls);
-                draw(graphics);
                 break;
             case MEDIUM:
                 mediumMapDesigner(walls);
-                draw(graphics);
                 break;
             case HARD:
                 hardMapDesigner(walls);
-                draw(graphics);
                 break;
         }
+        draw(graphics);
     }
 
     void draw(Graphics graphics) {
