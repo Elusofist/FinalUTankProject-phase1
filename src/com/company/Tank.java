@@ -20,17 +20,27 @@ public class Tank extends MovingThing {
         graphic.drawLine(this.x, this.y, this.getGunX(), this.getGunY());
     }
 
-    boolean contacts(MovingThing movingThing) {
+    boolean contacts(Thing thing) {
         boolean result = false;
-        int distance = (int)Math.sqrt(Math.pow((double)(this.x - movingThing.getX()), 2.0D) + Math.pow((double)(this.getY() - movingThing.getY()), 2.0D));
-        byte sum;
-        if (movingThing instanceof Shot) {
+        int distance = (int)Math.sqrt(Math.pow((double)(this.x - thing.getX()), 2.0D) + Math.pow((double)(this.getY() - thing.getY()), 2.0D));
+        int sum;
+        if (thing instanceof Shot) {
             sum = 35;
             result = distance <= sum;
         }
 
-        if (movingThing instanceof Tank) {
+        if (thing instanceof Tank) {
             sum = 50;
+            result = distance <= sum;
+        }
+
+        if (thing instanceof PowerUpShape) {
+            sum = 40;
+            result = distance <= sum;
+        }
+
+        if (thing instanceof PowerUpShot) {
+            sum = 40;
             result = distance <= sum;
         }
 
@@ -38,11 +48,11 @@ public class Tank extends MovingThing {
     }
 
     int getGunX() {
-        return (int)Math.round((double)this.x + 40.0D * Math.sin(this.direction));
+        return (int)Math.round((double)this.x + GUN_LENGTH * Math.sin(this.direction));
     }
 
     int getGunY() {
-        return (int)Math.round((double)this.y + 40.0D * Math.cos(this.direction));
+        return (int)Math.round((double)this.y + GUN_LENGTH * Math.cos(this.direction));
     }
 
     double getDirection() {

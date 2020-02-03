@@ -22,7 +22,7 @@ public class Game extends JFrame {
     boolean prevP2Fire = false;
     boolean p1Won = false;
     boolean p2Won = false;
-    Map map = new Map();
+    Map map;
 
     Game() {
         this.setSize(WIDTH, HEIGHT);
@@ -31,6 +31,7 @@ public class Game extends JFrame {
         this.modifyRandomTank(this.player1.getTank(), this.player2.getTank());
         this.everything.add(this.player1.getTank());
         this.everything.add(this.player2.getTank());
+        this.map = new Map(MapLevel.EASY);
     }
 
     void modifyRandomTank(Tank lostTank, Tank wonTank) {

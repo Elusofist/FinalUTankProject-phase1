@@ -25,4 +25,6 @@ public abstract class Thing {
     int getY() {
         return this.y;
     }
+
+//    abstract boolean contact(Thing thing);
 }

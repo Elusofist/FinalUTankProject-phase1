@@ -1,8 +1,6 @@
 package com.company;
 
-import java.awt.*;
-
-abstract public class PowerUpShape extends PowerUp {
+abstract public class PowerUpShape extends Thing{
 
     PowerUpShape(int x, int y) {
         super(x, y);

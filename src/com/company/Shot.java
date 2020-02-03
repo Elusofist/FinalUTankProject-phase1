@@ -10,14 +10,14 @@ import java.awt.Graphics;
 public class Shot extends MovingThing {
     static final int RADIUS = 10;
     static final int LIFE = 70;
-    int age = 70;
+    int age = LIFE;
 
     Shot(int x, int y, double d) {
         super(x, y, d, 3.0F, 0.0F);
     }
 
     void draw(Graphics graphic) {
-        graphic.fillOval(this.x - 10, this.y - 10, 20, 20);
+        graphic.fillOval(this.x - RADIUS, this.y - RADIUS, RADIUS * 2, RADIUS * 2);
     }
 
     void growOld() {

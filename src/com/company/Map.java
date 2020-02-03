@@ -7,6 +7,11 @@ import java.util.List;
 
 class Map{
     List<Wall> walls = new ArrayList<>();
+    MapLevel level;
+
+    Map (MapLevel level) {
+        this.level = level;
+    }
 
     static void easyMapDesigner(List<Wall> walls) {
         walls.add(new Wall(0, 200, 100, false));
@@ -82,7 +87,7 @@ class Map{
         walls.add(new Wall(700, 300, 100, true));
     }
 
-    void chooseMap(MapLevel level, Graphics graphics) {
+    void draw(Graphics graphics) {
         switch (level) {
             case EASY:
                 easyMapDesigner(walls);
@@ -94,10 +99,6 @@ class Map{
                 hardMapDesigner(walls);
                 break;
         }
-        draw(graphics);
+        walls.forEach(wall -> wall.draw(graphics));
     }
-
-    void draw(Graphics graphics) {
-            walls.forEach(wall -> wall.draw(graphics));
-        }
 }

@@ -2,8 +2,8 @@ package com.company;
 
 import java.awt.*;
 
-public class MinePowerUp extends PowerUpShape{
-    MinePowerUp(int x, int y) {
+public class MineShape extends PowerUpShape{
+    MineShape(int x, int y) {
         super(x, y);
     }
 
