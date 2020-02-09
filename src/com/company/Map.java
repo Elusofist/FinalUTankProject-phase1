@@ -14,6 +14,10 @@ class Map{
     }
 
     static void easyMapDesigner(List<Wall> walls) {
+        walls.add(new Wall(0,0, 800, false));
+        walls.add(new Wall(0,0, 800, true));
+        walls.add(new Wall(0,794,800, false));
+        walls.add(new Wall(794, 0, 800, true));
         walls.add(new Wall(0, 200, 100, false));
         walls.add(new Wall(0, 400, 800/3, false));
         walls.add(new Wall(800/6, 400, 100, true));
@@ -27,6 +31,10 @@ class Map{
     }
 
     static void mediumMapDesigner(List<Wall> walls) {
+        walls.add(new Wall(0,0, 800, false));
+        walls.add(new Wall(0,0, 800, true));
+        walls.add(new Wall(0,794,800, false));
+        walls.add(new Wall(794, 0, 800, true));
         walls.add(new Wall(0, 200, 100, false));
         walls.add(new Wall(100, 0, 200, true));
         walls.add(new Wall(100, 400, 300, true));
@@ -51,6 +59,10 @@ class Map{
     }
 
     static void hardMapDesigner(List<Wall> walls) {
+        walls.add(new Wall(0,0, 800, false));
+        walls.add(new Wall(0,0, 800, true));
+        walls.add(new Wall(0,794,800, false));
+        walls.add(new Wall(794, 0, 800, true));
         walls.add(new Wall(0, 100, 100, false));
         walls.add(new Wall(100, 100, 100, true));
         walls.add(new Wall(0, 200, 100, false));

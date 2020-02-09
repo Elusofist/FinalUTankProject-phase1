@@ -10,15 +10,14 @@ public class GameActionListener extends KeyAdapter {
     boolean p1Move;
     boolean p1Left;
     boolean p1Right;
-    boolean p1Up;
     boolean p1Down;
     boolean p1Fire;
     boolean p2Move;
     boolean p2Left;
     boolean p2Right;
-    boolean p2Up;
     boolean p2Down;
     boolean p2Fire;
+
 
     public GameActionListener() {
     }

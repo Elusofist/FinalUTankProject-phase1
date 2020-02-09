@@ -2,15 +2,18 @@ package com.company;
 
 import java.awt.*;
 
-public class LaserShape extends PowerUpShape{
+public class LaserShape extends PowerUp{
+
     LaserShape(int x, int y) {
         super(x, y);
+        this.circleColor = new Color(243, 23, 255);
+        this.textColor = Color.WHITE;
+        this.letter = "L";
     }
 
     @Override
     void draw(Graphics graphic) {
-        graphic.setColor(Color.ORANGE);
-        graphic.fillOval(this.x - 15, this.y - 15, 30, 30);
-        graphic.setColor(Color.BLACK);
+
+        super.draw(graphic, this.letter, this.circleColor, this.textColor);
     }
 }

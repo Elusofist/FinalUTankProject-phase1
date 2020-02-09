@@ -2,7 +2,7 @@ package com.company;
 
 import java.awt.*;
 
-public class FragBombShape extends PowerUpShape{
+public class FragBombShape extends PowerUp{
     FragBombShape(int x, int y) {
         super(x, y);
     }

@@ -5,7 +5,7 @@ package com.company;
 // (powered by Fernflower decompiler)
 //
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Shot extends MovingThing {
     static final int RADIUS = 10;
@@ -16,10 +16,12 @@ public class Shot extends MovingThing {
         super(x, y, d, 3.0F, 0.0F);
     }
 
+    @Override
     void draw(Graphics graphic) {
-        graphic.fillOval(this.x - RADIUS, this.y - RADIUS, RADIUS * 2, RADIUS * 2);
+        graphic.setColor(Color.BLACK);
+        graphic.fillOval(this.x - Shot.RADIUS, this.y - Shot.RADIUS,
+                Shot.RADIUS * 2, Shot.RADIUS * 2);
     }
-
     void growOld() {
         --this.age;
     }
