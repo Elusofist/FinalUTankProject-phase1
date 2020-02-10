@@ -11,37 +11,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        MainMenu mainMenu = new MainMenu();
-//        mainMenu.setSize(700,700);
-//
-//        Window frame = new Window();
-//        frame.setSize(700,700);
-//        mainMenu.frame = frame;
-//
-//        mainMenu.setVisible(true);
-//        frame.add(mainMenu);
-//        frame.setMainMenu(mainMenu);
-//
-//
-//        RulesMenu rulesMenu = new RulesMenu();
-//        rulesMenu.setSize(700,700);
-//        rulesMenu.setVisible(false);
-//        frame.setRulesMenu(rulesMenu);
-//
-//        frame.setLayout(null);
-//        frame.setVisible(true);
-        Game game = new Game();
-        game.addKeyListener(new GameActionListener());
-        game.setVisible(true);
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.setSize(700,700);
+
+        Window frame = Window.getInstance();
+        frame.setSize(700,700);
+        frame.addKeyListener(new GameActionListener());
+
+        mainMenu.setVisible(true);
+        frame.add(mainMenu);
+        frame.setMainMenu(mainMenu);
 
 
-        new Timer(
-                10,
-                e -> {
-                    game.updateState();
-                    game.repaint();
-                }
-        ).start();
+        RulesMenu rulesMenu = new RulesMenu();
+        rulesMenu.setSize(700,700);
+        rulesMenu.setVisible(false);
+        frame.setRulesMenu(rulesMenu);
+
+        frame.setVisible(true);
     }
 }
 

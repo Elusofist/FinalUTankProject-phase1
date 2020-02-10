@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RulesMenu extends JPanel {
-    Window frame;
     static String data;
 
     public RulesMenu() {
@@ -14,6 +13,7 @@ public class RulesMenu extends JPanel {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                Window frame = Window.getInstance();
                 MainMenu mainMenu = new MainMenu();
                 mainMenu.setSize(700,700);
                 frame.setMainMenu(mainMenu);

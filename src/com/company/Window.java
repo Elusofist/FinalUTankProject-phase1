@@ -3,13 +3,26 @@ package com.company;
 import javax.swing.*;
 
 public class Window extends JFrame {
+    private static Window windowInstance;
+
+    static Window getInstance() {
+        if (windowInstance == null)
+            windowInstance = new Window();
+
+        return windowInstance;
+    }
+
     MainMenu mainMenu;
     RulesMenu rulesMenu;
     KeyboardMenu keyboardMenu;
     Game game;
 
-    Window(){
+    private Window(){
         super();
+    }
+
+    public GameActionListener getListener() {
+        return (GameActionListener) this.getKeyListeners()[0];
     }
 
     public void setMainMenu(MainMenu mainMenu) {

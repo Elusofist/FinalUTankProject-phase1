@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 
 public class MainMenu extends JPanel {
 
-    Window frame;
-
 //    JButton button;
 
     public MainMenu() {
@@ -19,12 +17,14 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 // timer he o dastan bayad biad inja
-                MainMenu.super.setVisible(false);
 
-//                frame.setSize(700,700);
+                Window frame = Window.getInstance();
+                MainMenu.super.setVisible(false);
+                frame.setVisible(true);
 
                 Game game = new Game();
-
+                frame.setGame(game);
+                frame.pack();
                 game.setVisible(true);
                 game.setFocusable(true);
                 game.requestFocusInWindow();
@@ -35,14 +35,7 @@ public class MainMenu extends JPanel {
 
                 game.addKeyListener(new GameActionListener());
 
-//                frame.add(game);
-
-//                frame.game = game;
-                frame.setGame(game);
                 game.add(akbar);
-
-                frame.setLayout(null);
-                frame.setVisible(true);
 
                 akbar.addActionListener(new ActionListener() {
                     @Override
@@ -83,7 +76,7 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 MainMenu.super.setVisible(false);
-                frame.rulesMenu.setVisible(true);
+                Window.getInstance().rulesMenu.setVisible(true);
             }
         });
     }

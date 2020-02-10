@@ -29,6 +29,7 @@ public class GameActionListener extends KeyAdapter {
                 break;
             case 37:
                 this.p1Left = true;
+                System.out.println("!!!");
                 break;
             case 38:
                 this.p1Move = true;
