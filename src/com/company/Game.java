@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Game extends JFrame {
     static final int WIDTH = 800, HEIGHT = 800, WIN_POINT = 7;
+    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
 
     List<Thing> everything = new ArrayList();
@@ -266,10 +267,10 @@ public class Game extends JFrame {
     }
 
     void powerUpsEmerges() {
-        if (time % 500 < 0.8){
+        if (time % MINE_INTERVAL == 0){
             powerUps.add(new MineShape((int) (Math.random() * WIDTH), (int) (Math.random() * HEIGHT)));
         }
-        else {
+        if (time % LASER_INTERVAL == 0) {
             powerUps.add(new LaserShape((int) (Math.random()*Game.WIDTH), (int) (Math.random()*Game.HEIGHT)));
         }
     }
