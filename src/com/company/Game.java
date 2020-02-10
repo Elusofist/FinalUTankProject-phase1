@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Game extends JFrame {
     static final int WIDTH = 800, HEIGHT = 800, WIN_POINT = 7;
+    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
 
     List<Thing> everything = new ArrayList();
@@ -46,7 +47,7 @@ public class Game extends JFrame {
             lostTank.x = (int) (WIDTH * Math.random());
             lostTank.y = (int) (HEIGHT * Math.random());
             result = lostTank.contacts(wonTank);
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 result = wall.contacts(lostTank);
                 if (result)
                     break;
@@ -62,7 +63,7 @@ public class Game extends JFrame {
             p2Tank.x = (int) (WIDTH * Math.random());
             p2Tank.y = (int) (HEIGHT * Math.random());
             result = p1Tank.contacts(p2Tank);
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 result = wall.contacts(p1Tank) || wall.contacts(p2Tank);
                 if (result)
                     break;
@@ -70,30 +71,13 @@ public class Game extends JFrame {
         } while (result);
     }
 
-    boolean movingHandlerWhileContactsWithWalls(boolean move, Tank tank) {
-        if (move) {
-            for (Wall wall : map.walls) {
-                return (wall.contacts(tank));
-            }
-        }
-        return false;
-    }
-
     void listenedActionHandler(GameActionListener listener, Tank p1Tank, Tank p2Tank) {
         if (listener.p1Move) {
-
-
-//            if (!contactWithAnyWall) {
-                p1Tank.step();
-                if (p1Tank.contacts(p2Tank)
-                        || movingHandlerWhileContactsWithWalls(listener.p1Move, p1Tank)
-                        || p1Tank.getX() - p1Tank.RADIUS < 0
-                        || p1Tank.getX() + p1Tank.RADIUS > Game.WIDTH
-                        || p1Tank.getY() - p1Tank.RADIUS < 0
-                        || p1Tank.getY() + p1Tank.RADIUS > Game.HEIGHT) {
-                            p1Tank.negStep();
-                }
-//            }
+            p1Tank.step();
+            if (p1Tank.contacts(p2Tank)
+                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+                        p1Tank.negStep();
+            }
         }
 
         if (listener.p1Left) {
@@ -105,23 +89,11 @@ public class Game extends JFrame {
         }
 
         if (listener.p1Down) {
-//            for (Wall wall : map.walls) {
-//                if (!wall.contacts(p1Tank)) {
-//                    contactWithAnyWall = true;
-//                    break;
-//                }
-//            }
-//            if (!contactWithAnyWall) {
                     p1Tank.negStep();
                     if (p1Tank.contacts(p2Tank)
-                            || movingHandlerWhileContactsWithWalls(listener.p1Down, p1Tank)
-                            || p1Tank.getX() - p1Tank.RADIUS < 0
-                            || p1Tank.getX() + p1Tank.RADIUS > Game.WIDTH
-                            || p1Tank.getY() - p1Tank.RADIUS < 0
-                            || p1Tank.getY() + p1Tank.RADIUS > Game.HEIGHT) {
+                            || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
                         p1Tank.step();
                     }
-//                }
             }
 
         if (listener.p1Fire && !this.prevP1Fire) {
@@ -138,23 +110,12 @@ public class Game extends JFrame {
         this.prevP1Fire = listener.p1Fire;
 
         if (listener.p2Move) {
-//            for (Wall wall : map.walls) {
-//                if (!wall.contacts(p2Tank)) {
-//                    contactWithAnyWall = true;
-//                }
-//            }
-//            if (!contactWithAnyWall) {
-                    p2Tank.step();
-                    if (p2Tank.contacts(p1Tank)
-                            || movingHandlerWhileContactsWithWalls(listener.p2Move, p2Tank)
-                            || p2Tank.getX() - p2Tank.RADIUS < 0
-                            || p2Tank.getX() + p2Tank.RADIUS > Game.WIDTH
-                            || p2Tank.getY() - p2Tank.RADIUS < 0
-                            || p2Tank.getY() + p2Tank.RADIUS > Game.HEIGHT) {
-                        p2Tank.negStep();
-                    }
-                }
-//            }
+            p2Tank.step();
+            if (p2Tank.contacts(p1Tank)
+                    || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
+                p2Tank.negStep();
+            }
+        }
 
         if (listener.p2Left) {
             p2Tank.turnLeft();
@@ -165,22 +126,11 @@ public class Game extends JFrame {
         }
 
         if (listener.p2Down) {
-//            for (Wall wall : map.walls) {
-//                if (!wall.contacts(p2Tank)) {
-//                    contactWithAnyWall = true;
-//                }
-//            }
             p2Tank.negStep();
-//            if (!contactWithAnyWall) {
-                if (p1Tank.contacts(p2Tank)
-//                            || contactWithAnyWall
-                            || p2Tank.getX() - p2Tank.RADIUS < 0
-                            || p2Tank.getX() + p2Tank.RADIUS > Game.WIDTH
-                            || p2Tank.getY() - p2Tank.RADIUS < 0
-                            || p2Tank.getY() + p2Tank.RADIUS > Game.HEIGHT) {
-                        p2Tank.step();
-                    }
-//            }
+            if (p1Tank.contacts(p2Tank)
+                    || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
+                    p2Tank.step();
+            }
         }
 
         if (listener.p2Fire && !this.prevP2Fire && this.player2.ammo > 0) {
@@ -192,7 +142,7 @@ public class Game extends JFrame {
 
     void movingAndContactHandler(Tank p1Tank, Tank p2Tank) {
         for (Shot shot : shotsInTheAir) {
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 if (wall.contacts(shot))
                     shot.bounceAgainst(wall);
                 else
@@ -266,10 +216,10 @@ public class Game extends JFrame {
     }
 
     void powerUpsEmerges() {
-        if (time % 500 < 0.8){
+        if (time % MINE_INTERVAL == 0){
             powerUps.add(new MineShape((int) (Math.random() * WIDTH), (int) (Math.random() * HEIGHT)));
         }
-        else {
+        if (time % LASER_INTERVAL == 0) {
             powerUps.add(new LaserShape((int) (Math.random()*Game.WIDTH), (int) (Math.random()*Game.HEIGHT)));
         }
     }

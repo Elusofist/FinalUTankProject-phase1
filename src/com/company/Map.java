@@ -6,11 +6,24 @@ import java.util.List;
 
 
 class Map{
-    List<Wall> walls = new ArrayList<>();
-    MapLevel level;
+    private List<Wall> walls = new ArrayList<>();
 
     Map (MapLevel level) {
-        this.level = level;
+        switch (level) {
+            case EASY:
+                easyMapDesigner(walls);
+                break;
+            case MEDIUM:
+                mediumMapDesigner(walls);
+                break;
+            case HARD:
+                hardMapDesigner(walls);
+                break;
+        }
+    }
+
+    public List<Wall> getWalls() {
+        return walls;
     }
 
     static void easyMapDesigner(List<Wall> walls) {
@@ -100,17 +113,6 @@ class Map{
     }
 
     void draw(Graphics graphics) {
-        switch (level) {
-            case EASY:
-                easyMapDesigner(walls);
-                break;
-            case MEDIUM:
-                mediumMapDesigner(walls);
-                break;
-            case HARD:
-                hardMapDesigner(walls);
-                break;
-        }
         walls.forEach(wall -> wall.draw(graphics));
     }
 }
