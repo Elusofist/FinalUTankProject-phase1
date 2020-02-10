@@ -46,7 +46,7 @@ public class Game extends JFrame {
             lostTank.x = (int) (WIDTH * Math.random());
             lostTank.y = (int) (HEIGHT * Math.random());
             result = lostTank.contacts(wonTank);
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 result = wall.contacts(lostTank);
                 if (result)
                     break;
@@ -62,7 +62,7 @@ public class Game extends JFrame {
             p2Tank.x = (int) (WIDTH * Math.random());
             p2Tank.y = (int) (HEIGHT * Math.random());
             result = p1Tank.contacts(p2Tank);
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 result = wall.contacts(p1Tank) || wall.contacts(p2Tank);
                 if (result)
                     break;
@@ -72,7 +72,7 @@ public class Game extends JFrame {
 
     boolean movingHandlerWhileContactsWithWalls(boolean move, Tank tank) {
         if (move) {
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 return (wall.contacts(tank));
             }
         }
@@ -192,7 +192,7 @@ public class Game extends JFrame {
 
     void movingAndContactHandler(Tank p1Tank, Tank p2Tank) {
         for (Shot shot : shotsInTheAir) {
-            for (Wall wall : map.walls) {
+            for (Wall wall : map.getWalls()) {
                 if (wall.contacts(shot))
                     shot.bounceAgainst(wall);
                 else
