@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game extends JFrame {
+public class Game extends JPanel {
     static final int WIDTH = 800, HEIGHT = 800, WIN_POINT = 7;
     private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
