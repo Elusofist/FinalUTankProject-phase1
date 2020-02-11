@@ -1,22 +1,22 @@
 package com.company;
 
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 import javax.swing.*;
 
 public class Main {
 
+    final static int WIDTH = 800;
+    final static int HEIGHT = 800;
+
     public static void main(String[] args) {
 
         MainMenu mainMenu = new MainMenu();
-        mainMenu.setSize(700,700);
+        mainMenu.setSize(WIDTH,HEIGHT);
 
         Window frame = Window.getInstance();
-        frame.setSize(700,700);
+        frame.setSize(WIDTH,HEIGHT);
         frame.addKeyListener(new GameActionListener());
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 
         mainMenu.setVisible(true);
         frame.add(mainMenu);
@@ -24,10 +24,9 @@ public class Main {
 
 
         RulesMenu rulesMenu = new RulesMenu();
-        rulesMenu.setSize(700,700);
+        rulesMenu.setSize(WIDTH,HEIGHT);
         rulesMenu.setVisible(false);
         frame.setRulesMenu(rulesMenu);
-
         frame.setVisible(true);
     }
 }

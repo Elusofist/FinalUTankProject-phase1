@@ -2,22 +2,24 @@ package com.company;
 
 import java.awt.*;
 
-public class Laser extends Thing{
+public class Laser extends MovingThing{
 
-    final static int LIFESPAN = 1000;
+    final static int LIFESPAN = 500;
 
     Tank owner;
     int age;
     boolean isEmitting;
+    double slope;
 
     Laser(int x, int y, Tank owner) {
-        super(x, y);
+        super(x, y, 0, 0, 0);
         this.age = Laser.LIFESPAN;
         this.owner = owner;
+        this.direction = owner.direction;
         age = LIFESPAN;
         isEmitting = false;
-    }
 
+    }
 
     void draw(Graphics graphic) {
         if (this.isEmitting) {
@@ -45,49 +47,20 @@ public class Laser extends Thing{
             }
         }
     }
-//    public double contacts(int x, int y) {
-//        double dis;
-//        if (owner.getY() > owner.getGunY() && y < owner.getGunY()) {
-//            dis = Math.abs((y - owner.getGunY() + ((-1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((-1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
-//            return dis;
-//        }
-//
-//        if (owner.getX() > owner.getGunX() && owner.getY() < owner.getGunY() && y > owner.getGunY()) {
-//            dis = Math.abs((y - owner.getGunY() + ((-1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((-1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
-//            return dis;
-//        }
-//
-//        if (owner.getX() < owner.getGunX() && owner.getY() < owner.getGunY() && y > owner.getGunY()) {
-//            dis = Math.abs((y - owner.getGunY() - ((1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
-//            return dis;
-//        }
-//
-//        if (owner.getX() == owner.getGunX() && owner.getY() > owner.getGunY()){
-//            dis = Math.abs(x- owner.getGunX());
-//            return dis;
-//        }
-//
-//        if (owner.getX() == owner.getGunX() && owner.getY() < owner.getGunY()){
-//            dis = Math.abs(x- owner.getGunX());
-//            return dis;
-//        }
-//
-//        if (owner.getX() > owner.getGunX() && owner.getY() == owner.getGunY()){
-//            dis = Math.abs(this.y- owner.getGunY());
-//            return dis;
-//        }
-//
-//        if (owner.getX() < owner.getGunX() && owner.getY() == owner.getGunY()){
-//            dis = Math.abs(this.y- owner.getGunY());
-//            return dis;
-//        }
-//
-//        return 75;
-//    }
 
-    public void growOld() { --this.age; }
+    void growOld(){ this.age--; }
 
-    public boolean isDead() { return this.age <= 0; }
+    boolean isDead(){ return this.age <=0; }
 
-    public void kill() { this.age = 0; }
+    void update(){
+        this.x          = owner.getGunX();
+        this.y          = owner.getGunY();
+        this.direction  = owner.direction;
+
+    }
+
+    @Override
+    int getRadius() {
+        return 0;
+    }
 }

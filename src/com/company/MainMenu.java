@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 
 public class MainMenu extends JPanel {
 
-//    JButton button;
 
     public MainMenu() {
 
@@ -16,7 +15,6 @@ public class MainMenu extends JPanel {
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // timer he o dastan bayad biad inja
 
                 Window frame = Window.getInstance();
                 MainMenu.super.setVisible(false);
@@ -24,30 +22,13 @@ public class MainMenu extends JPanel {
 
                 Game game = new Game();
                 frame.setGame(game);
-                frame.pack();
+                game.setSize(700, 700);
                 game.setVisible(true);
                 game.setFocusable(true);
                 game.requestFocusInWindow();
 
-                JButton akbar = new JButton("Quit");
-                akbar.setBounds(200,100,300,300);
-                akbar.setVisible(true);
-
                 game.addKeyListener(new GameActionListener());
 
-                game.add(akbar);
-
-                akbar.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        frame.game.setVisible(false);
-
-//                        mainMenu.setVisible(true);
-                        MainMenu.super.setVisible(true);
-
-                    }
-
-                });
 
                 new Timer(
                         10,
@@ -67,6 +48,8 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 // what to do here;
+                Window frame = Window.getInstance();
+                frame.dispose();
             }
         });
 
@@ -77,6 +60,15 @@ public class MainMenu extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 MainMenu.super.setVisible(false);
                 Window.getInstance().rulesMenu.setVisible(true);
+            }
+        });
+
+        JButton showData = new JButton("Show Data");
+        this.add(showData);
+        showData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Data.getInstance().show();
             }
         });
     }
