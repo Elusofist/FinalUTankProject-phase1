@@ -18,20 +18,34 @@ public class Data {
     private int shotPerRound;
     private int roundsToWin;
     private Map map;
-    private List<Integer> p1Keyboard = new ArrayList<>();
-    private List<Integer> p2Keyboard = new ArrayList<>();
+
+    // Up, Down, Left, Right, Fire
+    private List<Integer> p1Keyboard;
+    private List<Integer> p2Keyboard;
     private boolean isMapPredesigned;
 
 
     Data() {
+        // Default settings
         isMapPredesigned = true;
         map = new Map(MapLevel.EASY);
         shotPerRound = 20;
         roundsToWin = 5;
-        p1Keyboard.add(32); p1Keyboard.add(37); p1Keyboard.add(38); p1Keyboard.add(39); p1Keyboard.add(40);
-        p2Keyboard.add(65); p2Keyboard.add(68); p2Keyboard.add(70); p2Keyboard.add(83); p2Keyboard.add(87);
-    }
+        p1Keyboard = new ArrayList<>();
+        p2Keyboard = new ArrayList<>();
+        p1Keyboard.add(KeyEvent.VK_UP);
+        p1Keyboard.add(KeyEvent.VK_DOWN);
+        p1Keyboard.add(KeyEvent.VK_LEFT);
+        p1Keyboard.add(KeyEvent.VK_RIGHT);
+        p1Keyboard.add(KeyEvent.VK_SPACE);
 
+
+        p2Keyboard.add(KeyEvent.VK_W);
+        p2Keyboard.add(KeyEvent.VK_S);
+        p2Keyboard.add(KeyEvent.VK_A);
+        p2Keyboard.add(KeyEvent.VK_D);
+        p2Keyboard.add(KeyEvent.VK_F);
+    }
 
     public void setP1Keyboard(List<Integer> p1Keyboard) {
         this.p1Keyboard = p1Keyboard;

@@ -27,6 +27,12 @@ public class Main {
         rulesMenu.setSize(WIDTH,HEIGHT);
         rulesMenu.setVisible(false);
         frame.setRulesMenu(rulesMenu);
+
+//        KeyboardMenu keyboardMenu = new KeyboardMenu();
+//        keyboardMenu.setSize(WIDTH,HEIGHT);
+//        keyboardMenu.setVisible(false);
+//        frame.setKeyboardMenu(keyboardMenu);
+
         frame.setVisible(true);
     }
 }

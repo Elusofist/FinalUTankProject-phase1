@@ -63,6 +63,7 @@ public class MainMenu extends JPanel {
             }
         });
 
+
         JButton showData = new JButton("Show Data");
         this.add(showData);
         showData.addActionListener(new ActionListener() {

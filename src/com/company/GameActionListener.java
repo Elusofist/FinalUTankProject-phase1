@@ -5,6 +5,7 @@ package com.company;//
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 public class GameActionListener extends KeyAdapter {
     boolean p1Move;
@@ -18,79 +19,69 @@ public class GameActionListener extends KeyAdapter {
     boolean p2Down;
     boolean p2Fire;
 
+    List<Integer> p1Keyboard;
+    List<Integer> p2Keyboard;
+
 
     public GameActionListener() {
+        this.p1Keyboard = Data.getInstance().getP1Keyboard();
+        this.p2Keyboard = Data.getInstance().getP2Keyboard();
     }
 
     public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case 32:
-                this.p1Fire = true;
-                break;
-            case 37:
-                this.p1Left = true;
-                System.out.println("!!!");
-                break;
-            case 38:
-                this.p1Move = true;
-                break;
-            case 39:
-                this.p1Right = true;
-                break;
-            case 40:
-                this.p1Down = true;
-                break;
-            case 65:
-                this.p2Left = true;
-                break;
-            case 68:
-                this.p2Right = true;
-                break;
-            case 70:
-                this.p2Fire = true;
-                break;
-            case 83:
-                this.p2Down = true;
-                break;
-            case 87:
-                this.p2Move = true;
-        }
+
+        int k = e.getKeyCode();
+
+        if (k == p1Keyboard.get(0))
+            this.p1Move = true;
+        else if ( k == p1Keyboard.get(1))
+            this.p1Down = true;
+        else if ( k == p1Keyboard.get(2))
+            this.p1Left = true;
+        else if ( k == p1Keyboard.get(3))
+            this.p1Right = true;
+        else if ( k == p1Keyboard.get(4))
+            this.p1Fire = true;
+
+        else if (k == p2Keyboard.get(0))
+            this.p2Move = true;
+        else if (k == p2Keyboard.get(1))
+            this.p2Down = true;
+        else if (k == p2Keyboard.get(2))
+            this.p2Left = true;
+        else if (k == p2Keyboard.get(3))
+            this.p2Right = true;
+        else if (k == p2Keyboard.get(4))
+            this.p2Fire = true;
 
         e.consume();
     }
 
     public void keyReleased(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case 32:
-                this.p1Fire = false;
-                break;
-            case 37:
-                this.p1Left = false;
-                break;
-            case 38:
-                this.p1Move = false;
-                break;
-            case 39:
-                this.p1Right = false;
-                break;
-            case 40:
-                this.p1Down = false;
-                break;
-            case 65:
-                this.p2Left = false;
-                break;
-            case 68:
-                this.p2Right = false;
-                break;
-            case 70:
-                this.p2Fire = false;
-                break;
-            case 83:
-                this.p2Down = false;
-                break;
-            case 87:
-                this.p2Move = false;
-        }
+
+        int k = e.getKeyCode();
+
+        if (k == p1Keyboard.get(0))
+            this.p1Move = false;
+        else if ( k == p1Keyboard.get(1))
+            this.p1Down = false;
+        else if ( k == p1Keyboard.get(2))
+            this.p1Left = false;
+        else if ( k == p1Keyboard.get(3))
+            this.p1Right = false;
+        else if ( k == p1Keyboard.get(4))
+            this.p1Fire = false;
+
+        else if (k == p2Keyboard.get(0))
+            this.p2Move = false;
+        else if (k == p2Keyboard.get(1))
+            this.p2Down = false;
+        else if (k == p2Keyboard.get(2))
+            this.p2Left = false;
+        else if (k == p2Keyboard.get(3))
+            this.p2Right = false;
+        else if (k == p2Keyboard.get(4))
+            this.p2Fire = false;
 
         e.consume();
     }

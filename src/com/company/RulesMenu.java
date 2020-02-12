@@ -7,6 +7,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +59,6 @@ public class RulesMenu extends JPanel {
 
         JSlider shotPerRoundSetter = new JSlider(JSlider.HORIZONTAL, 0, 30, 15);
         this.add(shotPerRoundSetter);
-
 
         shotPerRoundSetter.setMajorTickSpacing(10);
         shotPerRoundSetter.setMinorTickSpacing(1);
@@ -114,6 +115,23 @@ public class RulesMenu extends JPanel {
         group.add(isGenerated); group.add(isPredesigned);
 
 
+        JButton keySetting = new JButton("Key Settings");
+        this.add(keySetting);
+        keySetting.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Window frame = Window.getInstance();
+                RulesMenu.super.setVisible(false);
+                frame.setVisible(true);
+                KeyboardMenu keyboardMenu = new KeyboardMenu();
+                frame.setKeyboardMenu(keyboardMenu);
+                keyboardMenu.setSize(Window.WIDTH, Window.HEIGHT);
+                keyboardMenu.setVisible(true);
+                keyboardMenu.setFocusable(true);
+                keyboardMenu.requestFocusInWindow();
+
+            }
+        });
 
     }
 }
