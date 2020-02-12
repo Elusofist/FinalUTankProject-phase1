@@ -9,6 +9,7 @@ class Map{
     private List<Wall> walls = new ArrayList<>();
 
     Map (MapLevel level) {
+        super();
         switch (level) {
             case EASY:
                 easyMapDesigner(walls);

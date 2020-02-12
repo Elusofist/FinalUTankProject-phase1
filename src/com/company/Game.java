@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game extends JPanel {
+public class Game extends JFrame {
     static final int WIDTH = 800, HEIGHT = 800, WIN_POINT = 7;
     private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
@@ -133,11 +133,38 @@ public class Game extends JPanel {
             }
         }
 
-        if (listener.p2Fire && !this.prevP2Fire && this.player2.ammo > 0) {
-            this.shotsInTheAir.add(new Shot(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank.getDirection()));
-            --this.player2.ammo;
+
+        if (listener.p2Fire) {
+            if (p2Tank.powerUpShape == null) {
+                if (player2.ammo > 0) {
+                    if (!prevP2Fire) {
+                        Shot s = new Shot(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank.getDirection());
+                        this.shotsInTheAir.add(s);
+                        player2.ammo--;
+                    }
+                }
+            }
+            else {
+                if (p2Tank.powerUpShape instanceof MineShape){
+                    if (!prevP2Fire) {
+                        Mine mine = new Mine(p2Tank.getX(), p2Tank.getY(), p1Tank);
+                        mines.add(mine); // maybe not needed.
+                        p2Tank.powerUpShape = null;
+                    }
+                }
+                else if (p2Tank.powerUpShape instanceof LaserShape){
+                    p2Tank.laser.isEmitting = true;
+                }
+            }
         }
-        this.prevP2Fire = listener.p2Fire;
+        else {
+            if (p2Tank.powerUpShape != null){
+                if (p2Tank.powerUpShape instanceof LaserShape){
+                    p2Tank.laser.isEmitting = false;
+                }
+            }
+        }
+        prevP2Fire = listener.p2Fire;
     }
 
     void movingAndContactHandler(Tank p1Tank, Tank p2Tank) {
@@ -266,7 +293,18 @@ public class Game extends JPanel {
 
     public void paint(Graphics graphics) {
         super.paint(graphics);
-        map.draw(graphics);
+
+        if (this.p1Won) {
+            graphics.drawString("Player 1 won!", Game.WIDTH / 2 - 20, Game.HEIGHT / 2);
+        }
+
+        else if (this.p2Won) {
+            graphics.drawString("Player 2 won!", Game.WIDTH / 2 - 20, Game.HEIGHT / 2);
+        }
+        else
+            map.draw(graphics);
+
+        this.mines.forEach((mine -> mine.draw(graphics)));
         this.everything.forEach((thing) -> thing.draw(graphics));
         this.shotsInTheAir.forEach((shot) -> shot.draw(graphics));
         this.powerUps.forEach((powerUp -> powerUp.draw(graphics)));

@@ -8,11 +8,9 @@ import java.util.List;
 
 
 public class KeyAdaptorWrapper extends KeyAdapter {
-    static List<Integer> chosenKeysCodes = new ArrayList<>();
-    boolean p1Move = false, p1Left = false, p1Right = false, p1Down = false, p1Fire = false;
-    boolean p2Move = false, p2Left = false, p2Right = false, p2Down = false, p2Fire = false;
+    List<Integer> chosenKeysCodes = new ArrayList<>();
 
-    static public Integer setChosenKeysCodes(KeyListener e) {
+    public int setChosenKeysCodes(KeyListener e) {
         KeyEvent k = (KeyEvent) e;
         switch (k.getKeyCode()) {
             case KeyEvent.VK_0:
@@ -279,56 +277,11 @@ public class KeyAdaptorWrapper extends KeyAdapter {
 
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        int value = e.getKeyCode();
-        if (value == chosenKeysCodes.get(0)) {
-            p1Move = true;
-        } else if (value == chosenKeysCodes.get(1)){
-            p1Down = true;
-        }  else if (value == chosenKeysCodes.get(2)){
-            p1Left = true;
-        } else if (value == chosenKeysCodes.get(3)){
-            p1Right = true;
-        } else if (value == chosenKeysCodes.get(4)){
-            p1Fire = true;
-        } else if (value == chosenKeysCodes.get(5)){
-            p2Move = true;
-        } else if (value == chosenKeysCodes.get(6)){
-            p2Down = true;
-        } else if (value == chosenKeysCodes.get(7)){
-            p2Left = true;
-        } else if (value == chosenKeysCodes.get(8)){
-            p2Right = true;
-        } else if (value == chosenKeysCodes.get(9)){
-            p2Fire = true;
-        }
-        e.consume();
-    }
-
-    @Override
     public void keyReleased(KeyEvent e) {
-        int value = e.getKeyCode();
-        if (value == chosenKeysCodes.get(0)) {
-            p1Move = false;
-        } else if (value == chosenKeysCodes.get(1)){
-            p1Down = false;
-        }  else if (value == chosenKeysCodes.get(2)){
-            p1Left = false;
-        } else if (value == chosenKeysCodes.get(3)){
-            p1Right = false;
-        } else if (value == chosenKeysCodes.get(4)){
-            p1Fire = false;
-        } else if (value == chosenKeysCodes.get(5)){
-            p2Move = false;
-        } else if (value == chosenKeysCodes.get(6)){
-            p2Down = false;
-        } else if (value == chosenKeysCodes.get(7)){
-            p2Left = false;
-        } else if (value == chosenKeysCodes.get(8)){
-            p2Right = false;
-        } else if (value == chosenKeysCodes.get(9)){
-            p2Fire = false;
-        }
+//        int value = e.getKeyCode();
+//        chosenKeysCodes.add(value);
+        System.out.println(85);
+
         e.consume();
     }
 }

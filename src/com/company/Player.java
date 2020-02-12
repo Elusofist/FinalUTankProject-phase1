@@ -6,16 +6,16 @@ package com.company;
 //
 
 public class Player {
-    static final int FULL_AMMO = 10;
+    final int FULL_AMMO = Data.getInstance().getShotPerRound();
     Tank tank;
     int point = 0;
-    int ammo = 10;
+    int ammo;
 
     public Player() {
     }
 
     void newRound(boolean hasWon, double startX, double startY) {
-        this.ammo = 10;
+        this.ammo = FULL_AMMO;
         if (hasWon) {
             ++this.point;
         } else {
