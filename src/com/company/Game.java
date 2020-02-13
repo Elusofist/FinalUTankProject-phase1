@@ -11,16 +11,19 @@ import java.util.List;
 public class Game extends JPanel {
     static final int WIDTH = 800, HEIGHT = 800;
     int WIN_POINT;
-    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
+    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000, FRAGBOMB_INTERVAL = 500;
     static int time;
 
     List<Thing> everything = new ArrayList();
     Player player1 = new Player();
     Player player2 = new Player();
     List<Shot> shotsInTheAir = new ArrayList();
+    List<ShotFragBomb> shotFragBombs = new ArrayList<>();
     List<PowerUp> powerUps = new ArrayList<>();
     List<Mine> mines = new ArrayList<>();
     List<Laser> lasers = new ArrayList<>();
+    List<FragBomb> fragBombs = new ArrayList<>();
+
     ScoreBoard scoreBoard = new ScoreBoard(Game.WIDTH / 2 - 20, Game.HEIGHT - 40);
 
     boolean prevP1Fire = false, prevP2Fire = false, p1Won = false, p2Won = false;
@@ -42,7 +45,7 @@ public class Game extends JPanel {
         scoreBoard.setP2Point(player2.point);
         everything.add(scoreBoard);
 
-        JButton akbar = new JButton("Menu");
+        JButton akbar = new JButton("Stop");
         akbar.setBounds(200,100,300,300);
         akbar.setVisible(true);
         this.add(akbar);
@@ -52,7 +55,7 @@ public class Game extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 Window.getInstance().game.setVisible(false);
 
-                Window.getInstance().mainMenu.setVisible(true);
+                Window.getInstance().middleGameMenu.setVisible(true);
 
             }
 
@@ -114,30 +117,58 @@ public class Game extends JPanel {
                 p1Tank.step();
             }
         }
+        boolean shotFragBomb_in_air_1 =false;
+        for (ShotFragBomb shotFragBomb: shotFragBombs){
+            if (shotFragBomb.age>0)
+                shotFragBomb_in_air_1=true;
+            else
+                shotFragBomb_in_air_1 = false;
+        }
+        if (listener.p1Fire && !this.prevP1Fire&& shotFragBomb_in_air_1){
+            for (ShotFragBomb shotFragBomb: shotFragBombs){
+                if (shotFragBomb.age > 0){
 
-        if (listener.p1Fire) {
-            if (p1Tank.powerUpShape == null) {
-                if (player1.ammo > 0) {
-                    if (!prevP1Fire) {
-                        Shot s = new Shot(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank.getDirection());
-                        this.shotsInTheAir.add(s);
-                        player1.ammo--;
+                    for (int i = 0; i< 3; i++){
+                        Shot shot = new Shot(shotFragBomb.getX(),shotFragBomb.getY(),shotFragBomb.direction+7*i);
+                        this.shotsInTheAir.add(shot);
                     }
+
+                    shotFragBomb.kill();
                 }
+
             }
-            else {
+
+        }
+        if (listener.p1Fire && !shotFragBomb_in_air_1) {
+
                 if (p1Tank.powerUpShape instanceof MineShape){
                     if (!prevP1Fire) {
                         Mine mine = new Mine(p1Tank.getX(), p1Tank.getY(), p2Tank);
-                        mines.add(mine); // maybe not needed.
+                        mines.add(mine);
                         p1Tank.powerUpShape = null;
                     }
                 }
                 else if (p1Tank.powerUpShape instanceof LaserShape){
                     p1Tank.laser.isEmitting = true;
                 }
-            }
+                else if (p1Tank.powerUpShape instanceof FragBombShape) {
+                    if (!prevP1Fire) {
+                        ShotFragBomb fragBomb = new ShotFragBomb(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank.getDirection());
+                        this.shotFragBombs.add(fragBomb);
+                        p1Tank.powerUpShape = null;
+
+                    }
+                }else {
+                        if (!prevP1Fire) {
+                            Shot s = new Shot(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank.getDirection());
+                            this.shotsInTheAir.add(s);
+                            player1.ammo--;
+                        }
+                    }
+
+
         }
+
         else {
             if (p1Tank.powerUpShape != null){
                 if (p1Tank.powerUpShape instanceof LaserShape){
@@ -171,30 +202,58 @@ public class Game extends JPanel {
             }
         }
 
-
-        if (listener.p2Fire) {
-            if (p2Tank.powerUpShape == null) {
-                if (player2.ammo > 0) {
-                    if (!prevP2Fire) {
-                        Shot s = new Shot(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank.getDirection());
-                        this.shotsInTheAir.add(s);
-                        player2.ammo--;
-                    }
-                }
-            }
-            else {
-                if (p2Tank.powerUpShape instanceof MineShape){
-                    if (!prevP2Fire) {
-                        Mine mine = new Mine(p2Tank.getX(), p2Tank.getY(), p1Tank);
-                        mines.add(mine); // maybe not needed.
-                        p2Tank.powerUpShape = null;
-                    }
-                }
-                else if (p2Tank.powerUpShape instanceof LaserShape){
-                    p2Tank.laser.isEmitting = true;
-                }
-            }
+        boolean shotFragBomb_in_air_2 =false;
+        for (ShotFragBomb shotFragBomb: shotFragBombs){
+            if (shotFragBomb.age>0)
+                shotFragBomb_in_air_2=true;
+            else
+                shotFragBomb_in_air_2 = false;
         }
+        if (listener.p2Fire && !this.prevP2Fire&& shotFragBomb_in_air_2){
+            for (ShotFragBomb shotFragBomb: shotFragBombs){
+                if (shotFragBomb.age > 0){
+
+                    for (int i = 0; i< 3; i++){
+                        Shot shot = new Shot(shotFragBomb.getX(),shotFragBomb.getY(),shotFragBomb.direction+7*i);
+                        this.shotsInTheAir.add(shot);
+                    }
+
+                    shotFragBomb.kill();
+                }
+
+            }
+
+        }
+        if (listener.p2Fire && !shotFragBomb_in_air_2) {
+
+            if (p2Tank.powerUpShape instanceof MineShape){
+                if (!prevP2Fire) {
+                    Mine mine = new Mine(p2Tank.getX(), p2Tank.getY(), p1Tank);
+                    mines.add(mine);
+                    p2Tank.powerUpShape = null;
+                }
+            }
+            else if (p2Tank.powerUpShape instanceof LaserShape){
+                p2Tank.laser.isEmitting = true;
+            }
+            else if (p2Tank.powerUpShape instanceof FragBombShape) {
+                if (!prevP2Fire) {
+                    ShotFragBomb fragBomb = new ShotFragBomb(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank.getDirection());
+                    this.shotFragBombs.add(fragBomb);
+                    p2Tank.powerUpShape = null;
+
+                }
+            }else {
+                if (!prevP2Fire) {
+                    Shot s = new Shot(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank.getDirection());
+                    this.shotsInTheAir.add(s);
+                    player2.ammo--;
+                }
+            }
+
+
+        }
+
         else {
             if (p2Tank.powerUpShape != null){
                 if (p2Tank.powerUpShape instanceof LaserShape){
@@ -231,7 +290,37 @@ public class Game extends JPanel {
                 this.player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
         }
+        for (ShotFragBomb shotFragBomb : shotFragBombs) {
+            for (Wall wall : map.getWalls()) {
+                if (wall.contacts(shotFragBomb)) {
+                    for (int i = 0; i< 4; i++){
+                        Shot shot = new Shot(shotFragBomb.getX(),shotFragBomb.getY(),shotFragBomb.direction+i*10);
+                        this.shotsInTheAir.add(shot);
+                    }
 
+                    shotFragBomb.kill();
+                }
+                else
+                    shotFragBomb.step();
+            }
+            if (p1Tank.contacts(shotFragBomb)) {
+                shotFragBomb.kill();
+                this.everything.remove(this.player1.getTank());
+                this.modifyRandomTank(p1Tank, p2Tank);
+                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
+                this.everything.add(this.player1.getTank());
+                this.player2.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
+            }
+
+            if (p2Tank.contacts(shotFragBomb)) {
+                shotFragBomb.kill();
+                this.everything.remove(this.player2.getTank());
+                this.modifyRandomTank(p2Tank, p1Tank);
+                this.player2.newRound(false, Math.random() * 700.0D, Math.random() * 700.0D);
+                this.everything.add(this.player2.getTank());
+                this.player1.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
+            }
+        }
         for (Mine mine: mines){
             if (p2Tank.contacts(mine)){
                 if (mine.foe.equals(p2Tank)) {
@@ -260,6 +349,8 @@ public class Game extends JPanel {
 
         this.shotsInTheAir.forEach(Shot::growOld);
         this.powerUps.forEach(PowerUp::growOld);
+        this.shotFragBombs.forEach(ShotFragBomb::growOld);
+
         this.mines.forEach(Mine::growOld);
         this.lasers.forEach(Laser::update);
         this.lasers.forEach(Laser::growOld);
@@ -271,6 +362,8 @@ public class Game extends JPanel {
 
         this.shotsInTheAir.removeIf(Shot::isDead);
         this.powerUps.removeIf(PowerUp::isDead);
+        this.shotFragBombs.removeIf(ShotFragBomb::isDead);
+
         this.mines.removeIf(Mine::isDead);
         this.lasers.removeIf(Laser::isDead);
 
@@ -311,6 +404,9 @@ public class Game extends JPanel {
         }
         if (time % LASER_INTERVAL == 0) {
             powerUps.add(new LaserShape((int) (Math.random()*Game.WIDTH), (int) (Math.random()*Game.HEIGHT)));
+        }
+        if (time % FRAGBOMB_INTERVAL == 0){
+            powerUps.add(new FragBombShape((int) (Math.random() * Game.WIDTH),(int)(Math.random() * Game.HEIGHT)));
         }
     }
 
@@ -372,6 +468,8 @@ public class Game extends JPanel {
         this.shotsInTheAir.forEach((shot) -> shot.draw(graphics));
         this.powerUps.forEach((powerUp -> powerUp.draw(graphics)));
         this.lasers.forEach((laser -> laser.draw(graphics)));
+        this.shotFragBombs.forEach((shotFragBomb -> shotFragBomb.draw(graphics)));
+
 
 
         Toolkit.getDefaultToolkit().sync();

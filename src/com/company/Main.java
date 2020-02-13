@@ -28,6 +28,13 @@ public class Main {
         rulesMenu.setVisible(false);
         frame.setRulesMenu(rulesMenu);
 
+        MiddleGameMenu middleGameMenu = new MiddleGameMenu();
+        middleGameMenu.setSize(800, 810);
+        frame.setMiddleGameMenu(middleGameMenu);
+        middleGameMenu.setVisible(false);
+        mainMenu.middleGameMenu = middleGameMenu;
+        middleGameMenu.mainMenu = mainMenu;
+
 //        KeyboardMenu keyboardMenu = new KeyboardMenu();
 //        keyboardMenu.setSize(WIDTH,HEIGHT);
 //        keyboardMenu.setVisible(false);

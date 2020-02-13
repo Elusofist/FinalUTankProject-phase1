@@ -26,8 +26,12 @@ public class Tank extends MovingThing {
             if (this.powerUpShape instanceof MineShape){
             // inja if bezarim ke age mine bood chejoori, age laser bood chejoori
              graphic.setColor(new Color((int) (128 + Math.cos(Game.time * Math.PI / GLOWING_INTERVAL) * 120), 0, 0));
+//             powerUpShape =1;
         } else if (this.powerUpShape instanceof LaserShape) {
             graphic.setColor(new Color((int) (128 + Math.cos(Game.time * Math.PI / GLOWING_INTERVAL) * 120), 0,255));
+            }
+            else if (this.powerUpShape instanceof FragBombShape) {
+                graphic.setColor(new Color(0, 100,255));
             }
         } else
             graphic.setColor(new Color(82, 105, 135));
@@ -69,7 +73,10 @@ public class Tank extends MovingThing {
             sum += Shot.RADIUS;
             result = distance <= sum;
         }
-
+        if (thing instanceof ShotFragBomb) {
+            sum += FragBomb.RADIUS;
+            result = distance <= sum;
+        }
         if (thing instanceof Tank) {
             sum += this.RADIUS;
             result = gunContacts((Tank) thing) || distance <= sum;
