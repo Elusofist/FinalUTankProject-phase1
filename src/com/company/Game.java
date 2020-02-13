@@ -87,11 +87,14 @@ public class Game extends JPanel {
 
     void listenedActionHandler(GameActionListener listener, Tank p1Tank, Tank p2Tank) {
         if (listener.p1Move) {
-            p1Tank.step();
-            if (p1Tank.contacts(p2Tank)
-                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-                p1Tank.negStep();
-            }
+            p1Tank.changeVelocity();
+//            p1Tank.step();
+//            if (p1Tank.contacts(p2Tank)
+//                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+//                p1Tank.addPIToDirection();
+//                p1Tank.step();
+//                p1Tank.addPIToDirection();
+//            }
         }
 
         if (listener.p1Left) {
@@ -103,11 +106,16 @@ public class Game extends JPanel {
         }
 
         if (listener.p1Down) {
-            p1Tank.negStep();
-            if (p1Tank.contacts(p2Tank)
-                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-                p1Tank.step();
-            }
+            p1Tank.changeVelocity();
+            p1Tank.addPIToDirection();
+//            p1Tank.step();
+//            if (p1Tank.contacts(p2Tank)
+//                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+//                p1Tank.changeVelocity();
+//                p1Tank.addPIToDirection();
+//                p1Tank.step();
+//                p1Tank.addPIToDirection();
+//            }
         }
 
         if (listener.p1Fire) {
@@ -143,11 +151,9 @@ public class Game extends JPanel {
         prevP1Fire = listener.p1Fire;
 
         if (listener.p2Move) {
-            p2Tank.step();
-            if (p2Tank.contacts(p1Tank)
-                    || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-                p2Tank.negStep();
-            }
+            p2Tank.changeVelocity();
+//            p2Tank.step();
+//
         }
 
         if (listener.p2Left) {
@@ -159,13 +165,14 @@ public class Game extends JPanel {
         }
 
         if (listener.p2Down) {
-            p2Tank.negStep();
-            if (p1Tank.contacts(p2Tank)
-                    || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-                p2Tank.step();
-            }
+            p2Tank.changeVelocity();
+            p1Tank.addPIToDirection();
+//            p1Tank.step();
+//
         }
 
+        if(!listener.p1Move && !listener.p1Down) p1Tank.changeNegVelocity();
+        if(!listener.p2Down && !listener.p2Move) p2Tank.changeNegVelocity();
 
         if (listener.p2Fire) {
             if (p2Tank.powerUpShape == null) {
@@ -198,6 +205,27 @@ public class Game extends JPanel {
             }
         }
         prevP2Fire = listener.p2Fire;
+
+        if (time != 0) {
+            p1Tank.step();
+            p2Tank.step();
+        }
+
+        if (p1Tank.contacts(p2Tank)
+                || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
+            p2Tank.changeVelocity();
+            p2Tank.addPIToDirection();
+            p2Tank.step();
+            p2Tank.addPIToDirection();
+        }
+
+        if (p2Tank.contacts(p1Tank)
+                || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
+            p2Tank.changeNegVelocity();
+            p1Tank.addPIToDirection();
+            p1Tank.step();
+            p1Tank.addPIToDirection();
+        }
     }
 
     void movingAndContactHandler(Tank p1Tank, Tank p2Tank) {
