@@ -1,15 +1,16 @@
-package com.company;//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
+package com.company;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game extends JFrame {
-    static final int WIDTH = 800, HEIGHT = 800, WIN_POINT = 7;
+public class Game extends JPanel {
+    static final int WIDTH = 800, HEIGHT = 800;
+    int WIN_POINT;
     private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
 
@@ -23,11 +24,12 @@ public class Game extends JFrame {
     ScoreBoard scoreBoard = new ScoreBoard(Game.WIDTH / 2 - 20, Game.HEIGHT - 40);
 
     boolean prevP1Fire = false, prevP2Fire = false, p1Won = false, p2Won = false;
-    static Map map;
+    Map map;
 
     Game() {
         time = 0;
-        map = new Map(MapLevel.EASY); //WILL BE EDITED
+        map         = Data.getInstance().getMap();
+        WIN_POINT   = Data.getInstance().getRoundToWin();
 
         this.setSize(WIDTH, HEIGHT);
         this.player1.newRound(false, Math.random() * WIDTH, Math.random() * HEIGHT);
@@ -39,6 +41,23 @@ public class Game extends JFrame {
         scoreBoard.setP1Point(player1.point);
         scoreBoard.setP2Point(player2.point);
         everything.add(scoreBoard);
+
+        JButton akbar = new JButton("Menu");
+        akbar.setBounds(200,100,300,300);
+        akbar.setVisible(true);
+        this.add(akbar);
+
+        akbar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Window.getInstance().game.setVisible(false);
+
+                Window.getInstance().mainMenu.setVisible(true);
+
+            }
+
+        });
+
     }
 
     void modifyRandomTank(Tank lostTank, Tank wonTank) {
@@ -76,7 +95,7 @@ public class Game extends JFrame {
             p1Tank.step();
             if (p1Tank.contacts(p2Tank)
                     || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-                        p1Tank.negStep();
+                p1Tank.negStep();
             }
         }
 
@@ -89,25 +108,44 @@ public class Game extends JFrame {
         }
 
         if (listener.p1Down) {
-                    p1Tank.negStep();
-                    if (p1Tank.contacts(p2Tank)
-                            || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-                        p1Tank.step();
-                    }
-            }
-
-        if (listener.p1Fire && !this.prevP1Fire) {
-            if (p1Tank.powerUpShape instanceof MineShape) {
-                Mine mine = new Mine(p1Tank.getX(), p1Tank.getY(), p2Tank);
-                mines.add(mine); // maybe not needed.
-                p1Tank.powerUpShape = null;
-            } else if (player1.ammo > 0) {
-                Shot s = new Shot(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank.getDirection());
-                this.shotsInTheAir.add(s);
-                player1.ammo--;
+            p1Tank.negStep();
+            if (p1Tank.contacts(p2Tank)
+                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+                p1Tank.step();
             }
         }
-        this.prevP1Fire = listener.p1Fire;
+
+        if (listener.p1Fire) {
+            if (p1Tank.powerUpShape == null) {
+                if (player1.ammo > 0) {
+                    if (!prevP1Fire) {
+                        Shot s = new Shot(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank.getDirection());
+                        this.shotsInTheAir.add(s);
+                        player1.ammo--;
+                    }
+                }
+            }
+            else {
+                if (p1Tank.powerUpShape instanceof MineShape){
+                    if (!prevP1Fire) {
+                        Mine mine = new Mine(p1Tank.getX(), p1Tank.getY(), p2Tank);
+                        mines.add(mine); // maybe not needed.
+                        p1Tank.powerUpShape = null;
+                    }
+                }
+                else if (p1Tank.powerUpShape instanceof LaserShape){
+                    p1Tank.laser.isEmitting = true;
+                }
+            }
+        }
+        else {
+            if (p1Tank.powerUpShape != null){
+                if (p1Tank.powerUpShape instanceof LaserShape){
+                    p1Tank.laser.isEmitting = false;
+                }
+            }
+        }
+        prevP1Fire = listener.p1Fire;
 
         if (listener.p2Move) {
             p2Tank.step();
@@ -129,7 +167,7 @@ public class Game extends JFrame {
             p2Tank.negStep();
             if (p1Tank.contacts(p2Tank)
                     || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-                    p2Tank.step();
+                p2Tank.step();
             }
         }
 
@@ -181,35 +219,49 @@ public class Game extends JFrame {
                 this.modifyRandomTank(p1Tank, p2Tank);
                 this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
                 this.everything.add(this.player1.getTank());
-                this.player2.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
+                this.player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
 
             if (p2Tank.contacts(shot)) {
                 shot.kill();
                 this.everything.remove(this.player2.getTank());
                 this.modifyRandomTank(p2Tank, p1Tank);
-                this.player2.newRound(false, Math.random() * 700.0D, Math.random() * 700.0D);
+                this.player2.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                 this.everything.add(this.player2.getTank());
-                this.player1.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
+                this.player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
         }
 
         for (Mine mine: mines){
             if (p2Tank.contacts(mine)){
-//                    System.out.println("akbar");
-                mine.kill(); // kill this shot!
-                everything.remove(player2.getTank());
-                modifyRandomTank(p2Tank, p1Tank);
-                player2.newRound(false, p2Tank.x, p2Tank.y);
-                everything.add(player2.getTank());
+                if (mine.foe.equals(p2Tank)) {
+                    mine.kill(); // kill this shot!
+                    everything.remove(player2.getTank());
+                    modifyRandomTank(p2Tank, p1Tank);
+                    player2.newRound(false, p2Tank.x, p2Tank.y);
+                    everything.add(player2.getTank());
 
-                player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                    player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                }
+            }
+
+            if (p1Tank.contacts(mine)){
+                if (mine.foe.equals(p1Tank)) {
+                    mine.kill(); // kill this shot!
+                    everything.remove(player1.getTank());
+                    modifyRandomTank(p1Tank, p2Tank);
+                    player1.newRound(false, p1Tank.x, p1Tank.y);
+                    everything.add(player1.getTank());
+
+                    player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                }
             }
         }
 
         this.shotsInTheAir.forEach(Shot::growOld);
         this.powerUps.forEach(PowerUp::growOld);
         this.mines.forEach(Mine::growOld);
+        this.lasers.forEach(Laser::update);
         this.lasers.forEach(Laser::growOld);
 
         for (Laser laser: lasers) {
@@ -228,18 +280,29 @@ public class Game extends JFrame {
             if (p1Tank.contacts(powerUpShape)) {
                 p1Tank.setPowerUp(powerUpShape);
                 if (powerUpShape instanceof LaserShape) {
-                    Laser laser = new Laser(p1Tank.getGunX(), p2Tank.getGunY(), p1Tank);
+                    Laser laser = new Laser(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank);
                     p1Tank.laser = laser;
+                    lasers.add(laser);
+                }
+                powerUpShape.kill();
+            }
+
+            if (p2Tank.contacts(powerUpShape)) {
+                p2Tank.setPowerUp(powerUpShape);
+                if (powerUpShape instanceof LaserShape) {
+                    Laser laser = new Laser(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank);
+                    p2Tank.laser = laser;
+                    lasers.add(laser);
                 }
                 powerUpShape.kill();
             }
         }
 
-        for (Laser laser: lasers){
-            if (laser.isEmitting) {
-                System.out.println(p2Tank.contacts(laser));
-            }
-        }
+//        for (Laser laser: lasers){
+//            if (laser.isEmitting) {
+//                System.out.println(p2Tank.contacts(laser));
+//            }
+//        }
     }
 
     void powerUpsEmerges() {
@@ -254,10 +317,10 @@ public class Game extends JFrame {
     void ammoFinish() {
         if (this.player1.ammo <= 0 && this.player2.ammo <= 0) {
             this.everything.remove(this.player2.getTank());
-            this.player2.newRound(false, Math.random() * 700.0D, Math.random() * 700.0D);
+            this.player2.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             this.everything.add(this.player2.getTank());
             this.everything.remove(this.player1.getTank());
-            this.player1.newRound(false, Math.random() * 700.0D, Math.random() * 700.0D);
+            this.player1.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             this.everything.add(this.player1.getTank());
         }
     }
@@ -275,17 +338,17 @@ public class Game extends JFrame {
 
             listenedActionHandler(listener, p1Tank, p2Tank);
 
-
-
             ammoFinish();
 
         } else if (this.player1.point == WIN_POINT) {
             this.everything = new ArrayList<>();
             this.shotsInTheAir = new ArrayList<>();
+            this.powerUps = new ArrayList<>();
             this.p1Won = true;
         } else if (this.player2.point == WIN_POINT) {
             this.everything = new ArrayList<>();
             this.shotsInTheAir = new ArrayList<>();
+            this.powerUps = new ArrayList<>();
             this.p2Won = true;
         }
         time++;
@@ -308,16 +371,8 @@ public class Game extends JFrame {
         this.everything.forEach((thing) -> thing.draw(graphics));
         this.shotsInTheAir.forEach((shot) -> shot.draw(graphics));
         this.powerUps.forEach((powerUp -> powerUp.draw(graphics)));
-        this.mines.forEach((mine -> mine.draw(graphics)));
-        graphics.drawString(this.player1.point + " - " + this.player2.point, 350, 680);
+        this.lasers.forEach((laser -> laser.draw(graphics)));
 
-        if (this.p1Won) {
-            graphics.drawString("Player 1 won!", 370, 400);
-        }
-
-        if (this.p2Won) {
-            graphics.drawString("Player 2 won!", 370, 400);
-        }
 
         Toolkit.getDefaultToolkit().sync();
     }
