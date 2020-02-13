@@ -2,7 +2,7 @@ package com.company;
 
 import java.awt.*;
 
-public class Laser extends Thing{
+public class Laser extends MovingThing{
 
     final static int LIFESPAN = 1000;
 
@@ -11,7 +11,7 @@ public class Laser extends Thing{
     boolean isEmitting;
 
     Laser(int x, int y, Tank owner) {
-        super(x, y);
+        super(x, y, 0,0 ,0);
         this.age = Laser.LIFESPAN;
         this.owner = owner;
         age = LIFESPAN;
@@ -90,4 +90,16 @@ public class Laser extends Thing{
     public boolean isDead() { return this.age <= 0; }
 
     public void kill() { this.age = 0; }
+
+    void update(){
+        this.x          = owner.getGunX();
+        this.y          = owner.getGunY();
+        this.direction  = owner.direction;
+
+    }
+
+    @Override
+    int getRadius() {
+        return 0;
+    }
 }
