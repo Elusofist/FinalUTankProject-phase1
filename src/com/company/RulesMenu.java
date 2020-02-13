@@ -2,32 +2,24 @@ package com.company;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class RulesMenu extends JPanel {
 
     public RulesMenu() {
+
         JButton back = new JButton("Menu");
         this.add(back);
-        back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Window frame = Window.getInstance();
-                MainMenu mainMenu = new MainMenu();
-                mainMenu.setSize(700,700);
-                frame.setMainMenu(mainMenu);
-                RulesMenu.super.setVisible(false);
-                frame.mainMenu.setVisible(true);
-            }
+        back.addActionListener(actionEvent -> {
+            Window frame = Window.getInstance();
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.setSize(Game.WIDTH,Game.HEIGHT);
+            frame.setMainMenu(mainMenu);
+            RulesMenu.super.setVisible(false);
+            frame.mainMenu.setVisible(true);
         });
 
         JLabel roundsToWinLabel = new JLabel("Rounds To Win: ");
@@ -43,13 +35,10 @@ public class RulesMenu extends JPanel {
         roundsToWinSetter.setPaintLabels(true);
         roundsToWinLabel.setFont(font);
 
-        roundsToWinSetter.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                if (! roundsToWinSetter.getValueIsAdjusting()){
-                    int n = (int) roundsToWinSetter.getValue();
-                    Data.getInstance().setRoundsToWin(n);
-                }
+        roundsToWinSetter.addChangeListener(changeEvent -> {
+            if (! roundsToWinSetter.getValueIsAdjusting()){
+                int n = roundsToWinSetter.getValue();
+                Data.getInstance().setRoundsToWin(n);
             }
         });
 
@@ -67,13 +56,10 @@ public class RulesMenu extends JPanel {
         font = new Font("Serif", Font.ITALIC, 15);
         shotPerRoundSetter.setFont(font);
 
-        shotPerRoundSetter.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent changeEvent) {
-                if (! shotPerRoundSetter.getValueIsAdjusting()){
-                    int shotPerRound = (int) shotPerRoundSetter.getValue();
-                    Data.getInstance().setShotPerRound(shotPerRound);
-                }
+        shotPerRoundSetter.addChangeListener(changeEvent -> {
+            if (! shotPerRoundSetter.getValueIsAdjusting()){
+                int shotPerRound = (int) shotPerRoundSetter.getValue();
+                Data.getInstance().setShotPerRound(shotPerRound);
             }
         });
 
@@ -83,33 +69,20 @@ public class RulesMenu extends JPanel {
         String[] names = {"Easy", "Medium", "Hard"};
         JComboBox mapLevelSetter = new JComboBox(names);
         this.add(mapLevelSetter);
-        mapLevelSetter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                JComboBox cb = (JComboBox) actionEvent.getSource();
-                String mapName = (String) cb.getSelectedItem();
-                Data.getInstance().setMap(mapName);
-            }
+        mapLevelSetter.addActionListener(actionEvent -> {
+            JComboBox cb = (JComboBox) actionEvent.getSource();
+            String mapName = (String) cb.getSelectedItem();
+            Data.getInstance().setMap(mapName);
         });
 
 
         JRadioButton isPredesigned = new JRadioButton("Use Predesigned map");
         this.add(isPredesigned);
-        isPredesigned.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Data.getInstance().setMapPredesigned(true);
-            }
-        });
+        isPredesigned.addActionListener(actionEvent -> Data.getInstance().setMapPredesigned(true));
 
         JRadioButton isGenerated = new JRadioButton("Generate map");
         this.add(isGenerated);
-        isGenerated.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Data.getInstance().setMapPredesigned(false);
-            }
-        });
+        isGenerated.addActionListener(actionEvent -> Data.getInstance().setMapPredesigned(false));
 
         ButtonGroup group = new ButtonGroup();
         group.add(isGenerated); group.add(isPredesigned);
@@ -117,20 +90,17 @@ public class RulesMenu extends JPanel {
 
         JButton keySetting = new JButton("Key Settings");
         this.add(keySetting);
-        keySetting.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Window frame = Window.getInstance();
-                RulesMenu.super.setVisible(false);
-                frame.setVisible(true);
-                KeyboardMenu keyboardMenu = new KeyboardMenu();
-                frame.setKeyboardMenu(keyboardMenu);
-                keyboardMenu.setSize(Window.WIDTH, Window.HEIGHT);
-                keyboardMenu.setVisible(true);
-                keyboardMenu.setFocusable(true);
-                keyboardMenu.requestFocusInWindow();
+        keySetting.addActionListener(actionEvent -> {
+            Window frame = Window.getInstance();
+            RulesMenu.super.setVisible(false);
+            frame.setVisible(true);
+            KeyboardMenu keyboardMenu = new KeyboardMenu();
+            frame.setKeyboardMenu(keyboardMenu);
+            keyboardMenu.setSize(Game.WIDTH, Game.HEIGHT);
+            keyboardMenu.setVisible(true);
+            keyboardMenu.setFocusable(true);
+            keyboardMenu.requestFocusInWindow();
 
-            }
         });
 
     }

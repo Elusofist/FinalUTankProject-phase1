@@ -3,7 +3,6 @@ package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,19 +95,16 @@ public class KeyboardMenu extends JPanel {
 
         JButton back = new JButton("Back");
         this.add(back);
-        back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (Data.getInstance().getP2Keyboard().size() == 5) {
-                    KeyboardMenu.super.setVisible(false);
-                    Window.getInstance().rulesMenu.setVisible(true);
-                }
-                else {
-                    completionError.setVisible(true);
-                    a.requestFocusInWindow();
-                }
-             }
-        });
+        back.addActionListener(actionEvent -> {
+            if (Data.getInstance().getP2Keyboard().size() == 5) {
+                KeyboardMenu.super.setVisible(false);
+                Window.getInstance().rulesMenu.setVisible(true);
+            }
+            else {
+                completionError.setVisible(true);
+                a.requestFocusInWindow();
+            }
+         });
 
     }
 }

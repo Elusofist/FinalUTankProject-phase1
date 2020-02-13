@@ -3,8 +3,6 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +12,14 @@ public class Game extends JPanel {
     private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
 
-    List<Thing> everything = new ArrayList();
+    List<Thing> everything = new ArrayList<>();
     Player player1 = new Player();
     Player player2 = new Player();
-    List<Shot> shotsInTheAir = new ArrayList();
+    List<Shot> shotsInTheAir = new ArrayList<>();
     List<PowerUp> powerUps = new ArrayList<>();
     List<Mine> mines = new ArrayList<>();
     List<Laser> lasers = new ArrayList<>();
-    ScoreBoard scoreBoard = new ScoreBoard(Game.WIDTH / 2 - 20, Game.HEIGHT - 40);
+    ScoreBoard scoreBoard = new ScoreBoard(Game.WIDTH / 2 - 20, Game.HEIGHT - 45);
 
     boolean prevP1Fire = false, prevP2Fire = false, p1Won = false, p2Won = false;
     Map map;
@@ -47,14 +45,10 @@ public class Game extends JPanel {
         akbar.setVisible(true);
         this.add(akbar);
 
-        akbar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Window.getInstance().game.setVisible(false);
+        akbar.addActionListener(actionEvent -> {
+            Window.getInstance().game.setVisible(false);
 
-                Window.getInstance().mainMenu.setVisible(true);
-
-            }
+            Window.getInstance().mainMenu.setVisible(true);
 
         });
 
@@ -73,6 +67,7 @@ public class Game extends JPanel {
             }
         } while (result);
     }
+
 
     void firstlyModifyRandomTank(Tank p1Tank, Tank p2Tank) {
         boolean result;
@@ -216,19 +211,19 @@ public class Game extends JPanel {
             if (p1Tank.contacts(shot)) {
                 shot.kill();
                 this.everything.remove(this.player1.getTank());
+                this.player1.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                 this.modifyRandomTank(p1Tank, p2Tank);
-                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
                 this.everything.add(this.player1.getTank());
-                this.player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                this.player2.newRound(true, 0, 0);
             }
 
             if (p2Tank.contacts(shot)) {
                 shot.kill();
                 this.everything.remove(this.player2.getTank());
-                this.modifyRandomTank(p2Tank, p1Tank);
                 this.player2.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                this.modifyRandomTank(p2Tank, p1Tank);
                 this.everything.add(this.player2.getTank());
-                this.player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                this.player1.newRound(true, 0,0);
             }
         }
 
@@ -249,11 +244,11 @@ public class Game extends JPanel {
                 if (mine.foe.equals(p1Tank)) {
                     mine.kill(); // kill this shot!
                     everything.remove(player1.getTank());
+                    player1.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                     modifyRandomTank(p1Tank, p2Tank);
-                    player1.newRound(false, p1Tank.x, p1Tank.y);
                     everything.add(player1.getTank());
 
-                    player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                    player2.newRound(true, 0, 0);
                 }
             }
         }

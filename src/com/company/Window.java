@@ -17,8 +17,6 @@ public class Window extends JFrame {
     KeyboardMenu keyboardMenu;
     Game game;
 
-    static final int WIDTH = 800, HEIGHT = 800;
-
     private Window(){
         super();
     }

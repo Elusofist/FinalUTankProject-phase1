@@ -63,14 +63,25 @@ public class Data {
         if (mapName == "Easy"){
             if(isMapPredesigned)
                 this.map = new Map(MapLevel.EASY);
+            else {
+                // random generated map.
+            }
+
         }
         else if (mapName == "Medium"){
             if(isMapPredesigned)
                 this.map = new Map(MapLevel.MEDIUM);
+            else{
+                // random generated map
+            }
         }
         else if (mapName == "Hard"){
             if(isMapPredesigned)
                 this.map = new Map(MapLevel.HARD);
+            else {
+                // random generated map
+            }
+
         }
     }
 
