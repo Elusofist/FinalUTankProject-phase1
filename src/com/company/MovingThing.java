@@ -10,11 +10,23 @@ public abstract class MovingThing extends Thing {
     float velocity;
     float angularVelocity;
 
-    MovingThing(int x, int y, double d, float v, float a) {
+    MovingThing(int x, int y, double d, float a) {
         super(x, y);
-        this.velocity = v;
+        this.velocity = 0;
         this.angularVelocity = a;
         this.direction = d;
+    }
+
+    public void changeVelocity() {
+        if (this.velocity < 10) {
+            this.velocity++;
+        }
+    }
+
+    public void changeNegVelocity() {
+        if (this.velocity > -10) {
+            this.velocity--;
+        }
     }
 
     private void changeDirection(double amount) {

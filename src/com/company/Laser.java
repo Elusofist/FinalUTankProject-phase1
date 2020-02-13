@@ -11,7 +11,7 @@ public class Laser extends MovingThing{
     boolean isEmitting;
 
     Laser(int x, int y, Tank owner) {
-        super(x, y, 0,0 ,0);
+        super(x, y, 0,0);
         this.age = Laser.LIFESPAN;
         this.owner = owner;
         age = LIFESPAN;

@@ -92,9 +92,11 @@ public class Game extends JPanel {
 
     void listenedActionHandler(GameActionListener listener, Tank p1Tank, Tank p2Tank) {
         if (listener.p1Move) {
+            p1Tank.changeVelocity();
             p1Tank.step();
             if (p1Tank.contacts(p2Tank)
                     || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+                p1Tank.changeNegVelocity();
                 p1Tank.negStep();
             }
         }
@@ -108,9 +110,11 @@ public class Game extends JPanel {
         }
 
         if (listener.p1Down) {
+            p1Tank.changeNegVelocity();
             p1Tank.negStep();
             if (p1Tank.contacts(p2Tank)
                     || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+                p1Tank.changeVelocity();
                 p1Tank.step();
             }
         }
@@ -148,9 +152,11 @@ public class Game extends JPanel {
         prevP1Fire = listener.p1Fire;
 
         if (listener.p2Move) {
+            p2Tank.changeVelocity();
             p2Tank.step();
             if (p2Tank.contacts(p1Tank)
                     || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
+                p2Tank.changeNegVelocity();
                 p2Tank.negStep();
             }
         }
@@ -164,9 +170,11 @@ public class Game extends JPanel {
         }
 
         if (listener.p2Down) {
+            p2Tank.changeNegVelocity();
             p2Tank.negStep();
             if (p1Tank.contacts(p2Tank)
                     || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
+                p2Tank.changeVelocity();
                 p2Tank.step();
             }
         }

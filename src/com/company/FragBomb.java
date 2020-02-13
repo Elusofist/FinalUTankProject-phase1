@@ -6,8 +6,8 @@ public class FragBomb extends MovingThing implements PowerUpUtility{
     final static int RADIUS = 20;
     int age = LIFE;
 
-    FragBomb(int x, int y, double d, float v, float a) {
-        super(x, y, d, v, a);
+    FragBomb(int x, int y, double d, float a) {
+        super(x, y, d, a);
     }
 
     boolean contacts(Tank tank) {
