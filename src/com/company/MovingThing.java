@@ -24,13 +24,17 @@ public abstract class MovingThing extends Thing {
     }
 
     public void changeNegVelocity() {
-        if (this.velocity > -10) {
+        if (this.velocity > 0) {
             this.velocity--;
         }
     }
 
     private void changeDirection(double amount) {
         this.direction = (this.direction + amount) % 6.283185307179586D;
+    }
+
+    public void addPIToDirection() {
+        this.direction += Math.PI;
     }
 
     public void turnLeft() {
@@ -48,8 +52,8 @@ public abstract class MovingThing extends Thing {
         this.y = (int)((long)this.y + Math.round((double)this.velocity * Math.cos(this.direction)));
     }
 
-    void negStep() {
-        this.x -= Math.round(this.velocity * Math.sin(this.direction));
-        this.y -= Math.round(this.velocity * Math.cos(this.direction));
-    }
+//    void negStep() {
+//        this.x -= Math.round(this.velocity * Math.sin(this.direction));
+//        this.y -= Math.round(this.velocity * Math.cos(this.direction));
+//    }
 }
