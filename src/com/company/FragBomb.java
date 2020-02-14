@@ -35,6 +35,6 @@ public class FragBomb extends MovingThing implements PowerUpUtility{
 
     @Override
     public int getRadius() {
-        return this.getRadius();
+        return RADIUS;
     }
 }
