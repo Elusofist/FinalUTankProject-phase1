@@ -8,7 +8,7 @@ public class FragBombShape extends PowerUp{
         super(x, y);
         this.circleColor = new  Color(41, 173, 10);
         this.textColor = new Color(0, 0, 0);
-        this.letter = "FRAG";
+        this.letter = "F";
     }
 
 
