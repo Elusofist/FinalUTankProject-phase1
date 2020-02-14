@@ -23,11 +23,11 @@ public class Tank extends MovingThing {
 
     void draw(Graphics graphic) {
         if (this.powerUpShape != null) {// should be glowing
-            if (this.powerUpShape instanceof MineShape){
-            // inja if bezarim ke age mine bood chejoori, age laser bood chejoori
-             graphic.setColor(new Color((int) (128 + Math.cos(Game.time * Math.PI / GLOWING_INTERVAL) * 120), 0, 0));
-        } else if (this.powerUpShape instanceof LaserShape) {
-            graphic.setColor(new Color((int) (128 + Math.cos(Game.time * Math.PI / GLOWING_INTERVAL) * 120), 0,255));
+            if (this.powerUpShape instanceof MineShape) {
+                // inja if bezarim ke age mine bood chejoori, age laser bood chejoori
+                graphic.setColor(new Color((int) (128 + Math.cos(Game.time * Math.PI / GLOWING_INTERVAL) * 120), 0, 0));
+            } else if (this.powerUpShape instanceof LaserShape) {
+                graphic.setColor(new Color((int) (128 + Math.cos(Game.time * Math.PI / GLOWING_INTERVAL) * 120), 0, 255));
             }
         } else
             graphic.setColor(new Color(82, 105, 135));
@@ -85,75 +85,27 @@ public class Tank extends MovingThing {
             result = distance <= sum;
         }
 
-//        if (thing instanceof Laser) {
-//            Laser laser = (Laser) thing;
-//            distance = laser.contacts(this.getX(), this.getY());
-//            result = distance <= sum;
-//        }
-
-        if (thing instanceof Laser){
+        if (thing instanceof Laser) {
             Laser laser = (Laser) thing;
-            Tank tank = laser.owner;
-            double m, b; // baraye moadele xat
-            m = ((-1 / Math.tan(tank.getDirection())) * tank.getGunX() + tank.getGunY());
-            b = tank.getGunY() - m * tank.getGunX();
-
-            if (tank.getY() > tank.getGunY())
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS )
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS );
-
-            if (tank.getX() > tank.getGunX() && tank.getY() < tank.getGunY())
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS )
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS );
-
-            if (tank.getX() < tank.getGunX() && tank.getY() < tank.getGunY())
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS )
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS );
-
-
-            if (tank.getX() == tank.getGunX() && tank.getY() > tank.getGunY()){
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS )
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS );
-            }
-
-
-            if (tank.getX() == tank.getGunX() && tank.getY() < tank.getGunY())
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS )
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS );
-
-
-            if (tank.getX() > tank.getGunX() && tank.getY() == tank.getGunY()) {
-                m = 0;
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS)
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS);
-            }
-
-            if (tank.getX() < tank.getGunX() && tank.getY() == tank.getGunY()) {
-                m = 0;
-                result = (laser.y < (m * laser.x) + b + Tank.RADIUS)
-                        && (laser.y > (m * laser.x) + b - Tank.RADIUS);
-            }
+            distance = laser.dis(this.getX(), this.getY());
+            System.out.println(distance);
+            result = distance <= sum;
         }
-
 
         if (thing instanceof FragBomb) {
             sum += FragBomb.RADIUS;
             result = distance <= sum;
         }
 
-//        if (thing instanceof Wall){
-//            result = sum <
-//        }
-
         return result;
     }
 
     int getGunX() {
-        return (int)Math.round((double)this.x + GUN_LENGTH * Math.sin(this.direction));
+        return (int) Math.round((double) this.x + GUN_LENGTH * Math.sin(this.direction));
     }
 
     int getGunY() {
-        return (int)Math.round((double)this.y + GUN_LENGTH * Math.cos(this.direction));
+        return (int) Math.round((double) this.y + GUN_LENGTH * Math.cos(this.direction));
     }
 
     double getDirection() {
@@ -161,5 +113,7 @@ public class Tank extends MovingThing {
     }
 
     @Override
-    int getRadius() { return RADIUS; }
+    int getRadius() {
+        return RADIUS;
+    }
 }

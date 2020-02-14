@@ -1,6 +1,5 @@
 package com.company;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -103,8 +102,8 @@ public class Game extends JPanel {
         }
 
         if (p1Tank.contacts(p2Tank)) {
-                p1Tank.x = ((p1Tank.x - p2Tank.x > 0)? 1 : -1) * STANDARD_TANKS_DISTANCE + p1Tank.x;
-                p1Tank.y = ((p1Tank.y - p2Tank.y > 0)? 1 : -1) * STANDARD_TANKS_DISTANCE + p1Tank.y;
+            p1Tank.x = ((p1Tank.x - p2Tank.x > 0)? 1 : -1) * STANDARD_TANKS_DISTANCE + p1Tank.x;
+            p1Tank.y = ((p1Tank.y - p2Tank.y > 0)? 1 : -1) * STANDARD_TANKS_DISTANCE + p1Tank.y;
         }
 
         boolean shotFragBombInTheAir1 = false;
@@ -341,7 +340,32 @@ public class Game extends JPanel {
                 }
             }
         }
+// از اینجا تغییر دادم
+        for (Laser laser:lasers){
+            if(p1Tank.contacts(laser) && laser.isEmitting==true){
+                if(laser.owner==p2Tank) {
+                    laser.kill();
+                    everything.remove(player1.getTank());
+                    modifyRandomTank(p1Tank, p2Tank);
+                    player1.newRound(false, p1Tank.x, p1Tank.y);
+                    everything.add(player1.getTank());
+                    player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                }
 
+            }
+            if(p2Tank.contacts(laser) && laser.isEmitting==true){
+                if(laser.owner==p1Tank) {
+                    laser.kill();
+                    everything.remove(player2.getTank());
+                    modifyRandomTank(p2Tank, p1Tank);
+                    player2.newRound(false, p2Tank.x, p2Tank.y);
+                    everything.add(player2.getTank());
+
+                    player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
+                }
+            }
+        }
+// تا اینجا
         this.shotsInTheAir.forEach(Shot::growOld);
         this.powerUps.forEach(PowerUp::growOld);
         this.mines.forEach(Mine::growOld);

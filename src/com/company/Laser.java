@@ -45,45 +45,49 @@ public class Laser extends MovingThing{
             }
         }
     }
-//    public double contacts(int x, int y) {
-//        double dis;
-//        if (owner.getY() > owner.getGunY() && y < owner.getGunY()) {
-//            dis = Math.abs((y - owner.getGunY() + ((-1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((-1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
-//            return dis;
-//        }
-//
-//        if (owner.getX() > owner.getGunX() && owner.getY() < owner.getGunY() && y > owner.getGunY()) {
-//            dis = Math.abs((y - owner.getGunY() + ((-1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((-1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
-//            return dis;
-//        }
-//
-//        if (owner.getX() < owner.getGunX() && owner.getY() < owner.getGunY() && y > owner.getGunY()) {
-//            dis = Math.abs((y - owner.getGunY() - ((1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
-//            return dis;
-//        }
-//
-//        if (owner.getX() == owner.getGunX() && owner.getY() > owner.getGunY()){
-//            dis = Math.abs(x- owner.getGunX());
-//            return dis;
-//        }
-//
-//        if (owner.getX() == owner.getGunX() && owner.getY() < owner.getGunY()){
-//            dis = Math.abs(x- owner.getGunX());
-//            return dis;
-//        }
-//
-//        if (owner.getX() > owner.getGunX() && owner.getY() == owner.getGunY()){
-//            dis = Math.abs(this.y- owner.getGunY());
-//            return dis;
-//        }
-//
-//        if (owner.getX() < owner.getGunX() && owner.getY() == owner.getGunY()){
-//            dis = Math.abs(this.y- owner.getGunY());
-//            return dis;
-//        }
-//
-//        return 75;
-//    }
+
+    //از اینجا
+    double dis(int x, int y) {
+        double dis;
+        if (owner.getY() > owner.getGunY() && y<=owner.getGunY()) {
+            dis = Math.abs((y - owner.getGunY() + ((-1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((-1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
+            return dis;
+        }
+
+        if (owner.getX() > owner.getGunX() && owner.getY() < owner.getGunY() && y>owner.getGunY()) {
+            dis = Math.abs((y - owner.getGunY() + ((-1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((-1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
+            return dis;
+        }
+
+        if (owner.getX() < owner.getGunX() && owner.getY() < owner.getGunY() && y>owner.getGunY()) {
+            dis = Math.abs((y - owner.getGunY() - ((1 / Math.tan(owner.getDirection())) * (x - owner.getGunX())))/Math.sqrt(Math.pow((1 / Math.tan(owner.getDirection())), 2.0D) + Math.pow(1, 2.0D)));
+            return dis;
+        }
+
+        if (owner.getX() == owner.getGunX() && owner.getY() > owner.getGunY()){
+            dis=Math.abs(x-owner.getGunX());
+            return dis;
+        }
+
+        if (owner.getX() == owner.getGunX() && owner.getY() < owner.getGunY()){
+            dis=Math.abs(x-owner.getGunX());
+            return dis;
+        }
+
+        if (owner.getX() > owner.getGunX() && owner.getY() == owner.getGunY()){
+            dis=Math.abs(y-owner.getGunY());
+            return dis;
+        }
+
+        if (owner.getX() < owner.getGunX() && owner.getY() == owner.getGunY()){
+            dis=Math.abs(y-owner.getGunY());
+            return dis;
+        }
+
+        return 75;
+    }
+
+    //تا اینجا
 
     public void growOld() { --this.age; }
 
