@@ -6,13 +6,14 @@ package com.company;
 //
 
 public abstract class MovingThing extends Thing {
+    private final static float MAX_VEL = 10, THRUST_ACC = 0.5f, FRICTION_ACC = 0.2f;
     double direction;
     float velocity;
     float angularVelocity;
 
-    MovingThing(int x, int y, double d, float a) {
+    MovingThing(int x, int y, double d, float a, float v0) {
         super(x, y);
-        this.velocity = 0;
+        this.velocity = v0;
         this.angularVelocity = a;
         this.direction = d;
     }
@@ -54,24 +55,24 @@ public abstract class MovingThing extends Thing {
 
     public void velocityInc(){
         // ta vaqti ke v az max kamtare, ye meqdar e xassi ziadesh mikone
-        if (this.velocity < 10) {
-            this.velocity+= 0.5;
+        if (this.velocity < MAX_VEL) {
+            this.velocity+= THRUST_ACC;
         }
     }
 
     public void velocityDec(){
         // ta vaqti ke v az min bishtare, ye meqdar e xassi kamesh mikone
-        if (this.velocity > -10) {
-            this.velocity-= 0.5;
+        if (this.velocity > - MAX_VEL) {
+            this.velocity-= THRUST_ACC;
         }
     }
 
     public void speedDown(){
         // andaze ye sor'at ro kam mikone; che sor'at mosbat bashe, che manfi
         if (this.velocity < 0)
-            this.velocity += 0.2;
+            this.velocity += THRUST_ACC;
         else if (this.velocity > 0)
-            this.velocity-= 0.2;
+            this.velocity-= THRUST_ACC;
     }
 
     void negStep() {
