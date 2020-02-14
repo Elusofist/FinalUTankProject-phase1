@@ -91,6 +91,8 @@ public class Game extends JPanel {
     }
 
     void listenedActionHandler(GameActionListener listener, Tank p1Tank, Tank p2Tank) {
+        boolean p1Contacts;
+        boolean p2Contacts;
         if (listener.p1Move) {
             p1Tank.velocityInc();
         }
@@ -155,9 +157,6 @@ public class Game extends JPanel {
             p2Tank.velocityDec();
         }
 
-        if(!listener.p1Move && !listener.p1Down) p1Tank.speedDown();
-        if(!listener.p2Down && !listener.p2Move) p2Tank.speedDown();
-
         if (listener.p2Fire) {
             if (p2Tank.powerUpShape == null) {
                 if (player2.ammo > 0) {
@@ -190,26 +189,27 @@ public class Game extends JPanel {
         }
         prevP2Fire = listener.p2Fire;
 
-        if (time != 0) {
-            p1Tank.step();
-            p2Tank.step();
-        }
-
         if (p1Tank.contacts(p2Tank)
                 || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-            p2Tank.changeVelocity();
-            p2Tank.addPIToDirection();
-            p2Tank.step();
-            p2Tank.addPIToDirection();
-        }
+            p2Tank.negStep();
+            p2Contacts = true;
+        } else p2Contacts = false;
 
         if (p2Tank.contacts(p1Tank)
-                || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-            p2Tank.changeNegVelocity();
-            p1Tank.addPIToDirection();
-            p1Tank.step();
-            p1Tank.addPIToDirection();
+                || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
+            p1Tank.negStep();
+            p1Contacts = true;
+        } else p1Contacts = false;
+
+        if (time != 0) {
+            if (!p1Contacts)
+                p1Tank.step();
+            if (!p2Contacts)
+                p2Tank.step();
         }
+
+        if(!listener.p1Move && !listener.p1Down) p1Tank.speedDown();
+        if(!listener.p2Down && !listener.p2Move) p2Tank.speedDown();
     }
 
     void movingAndContactHandler(Tank p1Tank, Tank p2Tank) {

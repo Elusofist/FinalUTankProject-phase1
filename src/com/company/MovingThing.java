@@ -73,4 +73,9 @@ public abstract class MovingThing extends Thing {
         else if (this.velocity > 0)
             this.velocity-= 0.2;
     }
+
+    void negStep() {
+        this.x -= Math.round(this.velocity * Math.sin(this.direction));
+        this.y -= Math.round(this.velocity * Math.cos(this.direction));
+    }
 }
