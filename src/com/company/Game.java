@@ -11,7 +11,7 @@ import java.util.List;
 public class Game extends JPanel {
     static final int WIDTH = 800, HEIGHT = 800;
     int WIN_POINT;
-    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
+    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000, FRAGBOMB_INTERVAL = 500;
     static int time;
 
     List<Thing> everything = new ArrayList();
@@ -286,6 +286,38 @@ public class Game extends JPanel {
             }
         }
 
+        for (ShotFragBomb shotFragBomb : shotFragBombs) {
+            for (Wall wall : map.getWalls()) {
+                if (wall.contacts(shotFragBomb)) {
+                    for (int i = 0; i< 4; i++){
+                        Shot shot = new Shot(shotFragBomb.getX(),shotFragBomb.getY(),shotFragBomb.direction+i*10);
+                        this.shotsInTheAir.add(shot);
+                    }
+
+                    shotFragBomb.kill();
+                }
+                else
+                    shotFragBomb.step();
+            }
+            if (p1Tank.contacts(shotFragBomb)) {
+                shotFragBomb.kill();
+                this.everything.remove(this.player1.getTank());
+                this.modifyRandomTank(p1Tank, p2Tank);
+                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
+                this.everything.add(this.player1.getTank());
+                this.player2.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
+            }
+
+            if (p2Tank.contacts(shotFragBomb)) {
+                shotFragBomb.kill();
+                this.everything.remove(this.player2.getTank());
+                this.modifyRandomTank(p2Tank, p1Tank);
+                this.player2.newRound(false, Math.random() * 700.0D, Math.random() * 700.0D);
+                this.everything.add(this.player2.getTank());
+                this.player1.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
+            }
+        }
+
         for (Mine mine: mines){
             if (p2Tank.contacts(mine)){
                 if (mine.foe.equals(p2Tank)) {
@@ -317,6 +349,7 @@ public class Game extends JPanel {
         this.mines.forEach(Mine::growOld);
         this.lasers.forEach(Laser::update);
         this.lasers.forEach(Laser::growOld);
+        this.shotFragBombs.forEach(ShotFragBomb::growOld);
 
         for (Laser laser: lasers) {
             if (laser.age <= 0)
@@ -327,6 +360,7 @@ public class Game extends JPanel {
         this.powerUps.removeIf(PowerUp::isDead);
         this.mines.removeIf(Mine::isDead);
         this.lasers.removeIf(Laser::isDead);
+        this.shotFragBombs.removeIf(ShotFragBomb::isDead);
 
         powerUpsEmerges();
 
@@ -365,6 +399,9 @@ public class Game extends JPanel {
         }
         if (time % LASER_INTERVAL == 0) {
             powerUps.add(new LaserShape((int) (Math.random()*Game.WIDTH), (int) (Math.random()*Game.HEIGHT)));
+        }
+        if (time % FRAGBOMB_INTERVAL == 0){
+            powerUps.add(new FragBombShape((int) (Math.random() * Game.WIDTH),(int)(Math.random() * Game.HEIGHT)));
         }
     }
 

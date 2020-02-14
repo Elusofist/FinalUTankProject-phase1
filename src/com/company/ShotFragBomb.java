@@ -9,7 +9,7 @@ public class ShotFragBomb extends MovingThing {
     int age = LIFE;
 
     ShotFragBomb(int x, int y, double d) {
-        super(x, y, d, 1.0F, 0.0F);
+        super(x, y, d, 1.0F, 1.0F);
     }
 
     @Override
