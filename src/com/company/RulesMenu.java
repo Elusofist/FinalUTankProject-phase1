@@ -1,11 +1,14 @@
 package com.company;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class RulesMenu extends JPanel {
 
@@ -98,6 +101,19 @@ public class RulesMenu extends JPanel {
         JButton keySetting = new JButton("Key Settings");
         this.add(keySetting);
         keySetting.addActionListener(actionEvent -> {
+
+            SimpleAudioPlayer beep = null;
+            try {
+                beep = new SimpleAudioPlayer("buttonBeep.wav");
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            }
+            beep.play();
+
             Window frame = Window.getInstance();
             RulesMenu.super.setVisible(false);
             frame.setVisible(true);
