@@ -72,17 +72,24 @@ public class RulesMenu extends JPanel {
         mapLevelSetter.addActionListener(actionEvent -> {
             JComboBox cb = (JComboBox) actionEvent.getSource();
             String mapName = (String) cb.getSelectedItem();
-            Data.getInstance().setMap(mapName);
+            Data.getInstance().setMap(mapName, Data.getInstance().getIsMapPredesigned());
         });
 
 
         JRadioButton isPredesigned = new JRadioButton("Use Predesigned map");
         this.add(isPredesigned);
-        isPredesigned.addActionListener(actionEvent -> Data.getInstance().setMapPredesigned(true));
+        isPredesigned.addActionListener(actionEvent -> {
+            Data.getInstance().setMapPredesigned(true);
+            Data.getInstance().modifyMap();
+                }
+        );
 
         JRadioButton isGenerated = new JRadioButton("Generate map");
         this.add(isGenerated);
-        isGenerated.addActionListener(actionEvent -> Data.getInstance().setMapPredesigned(false));
+        isGenerated.addActionListener(actionEvent -> {
+            Data.getInstance().setMapPredesigned(false);
+            Data.getInstance().modifyMap();
+        });
 
         ButtonGroup group = new ButtonGroup();
         group.add(isGenerated); group.add(isPredesigned);

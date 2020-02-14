@@ -13,7 +13,7 @@ public class Shot extends MovingThing {
     int age = LIFE;
 
     Shot(int x, int y, double d) {
-        super(x, y, d, 1);
+        super(x, y, d, 1, 1);
     }
 
     @Override
