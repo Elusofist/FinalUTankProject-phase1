@@ -103,8 +103,8 @@ public class Game extends JPanel {
         }
 
         if (p1Tank.contacts(p2Tank)) {
-            p1Tank.x -= STANDARD_TANKS_DISTANCE;
-            p1Tank.y -= STANDARD_TANKS_DISTANCE;
+                p1Tank.x = ((p1Tank.x - p2Tank.x > 0)? 1 : -1) * STANDARD_TANKS_DISTANCE + p1Tank.x;
+                p1Tank.y = ((p1Tank.y - p2Tank.y > 0)? 1 : -1) * STANDARD_TANKS_DISTANCE + p1Tank.y;
         }
 
         boolean shotFragBombInTheAir1 = false;
@@ -182,9 +182,9 @@ public class Game extends JPanel {
             p2Tank.velocityDec();
         }
 
-        if (p1Tank.contacts(p2Tank)) {
-            p2Tank.x -= STANDARD_TANKS_DISTANCE;
-            p2Tank.y -= STANDARD_TANKS_DISTANCE;
+        if (p2Tank.contacts(p1Tank)) {
+            p2Tank.x = ((p1Tank.x - p2Tank.x > 0)? -1 : 1) * STANDARD_TANKS_DISTANCE + p2Tank.x;
+            p2Tank.y = ((p1Tank.y - p2Tank.y > 0)? -1 : 1) * STANDARD_TANKS_DISTANCE + p2Tank.y;
         }
 
         boolean shotFragBombInTheAir2 =false;
