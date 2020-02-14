@@ -1,8 +1,11 @@
 package com.company;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +46,19 @@ public class KeyboardMenu extends JPanel {
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
+
+                SimpleAudioPlayer keyClick = null;
+                try {
+                    keyClick = new SimpleAudioPlayer("keyClick.wav");
+                } catch (UnsupportedAudioFileException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (LineUnavailableException ex) {
+                    ex.printStackTrace();
+                }
+                keyClick.play();
+
                 List<Integer> p1Keys = Data.getInstance().getP1Keyboard();
                 List<Integer> p2Keys = Data.getInstance().getP2Keyboard();
                 keyMatchError.setVisible(false);
@@ -96,6 +112,19 @@ public class KeyboardMenu extends JPanel {
         JButton back = new JButton("Back");
         this.add(back);
         back.addActionListener(actionEvent -> {
+
+            SimpleAudioPlayer beep = null;
+            try {
+                beep = new SimpleAudioPlayer("buttonBeep.wav");
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            }
+            beep.play();
+
             if (Data.getInstance().getP2Keyboard().size() == 5) {
                 KeyboardMenu.super.setVisible(false);
                 Window.getInstance().rulesMenu.setVisible(true);

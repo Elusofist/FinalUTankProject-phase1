@@ -1,10 +1,13 @@
 package com.company;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class MiddleGameMenu extends JPanel {
     MainMenu mainMenu;
@@ -18,6 +21,19 @@ public class MiddleGameMenu extends JPanel {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
+
                 MiddleGameMenu.super.setVisible(false);
                 mainMenu.setVisible(true);
 
@@ -29,6 +45,19 @@ public class MiddleGameMenu extends JPanel {
         resume.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
+
                 MiddleGameMenu.super.setVisible(false);
                 Window.getInstance().game.setVisible(true);
                 Window.getInstance().game.setFocusable(true);
@@ -42,6 +71,19 @@ public class MiddleGameMenu extends JPanel {
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
+
                 Window window = Window.getInstance();
                 window.setVisible(false);
             }

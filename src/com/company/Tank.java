@@ -12,6 +12,7 @@ public class Tank extends MovingThing {
     final static int GUN_LENGTH = 40, GLOWING_INTERVAL = 20;
     PowerUp powerUpShape = null;
     Laser laser = null;
+    SimpleAudioPlayer laserSound;
 
     Tank(int x, int y, double d) {
         super(x, y, d, 0.06f, 0);
@@ -162,4 +163,12 @@ public class Tank extends MovingThing {
 
     @Override
     int getRadius() { return RADIUS; }
+
+    public void setLaserSound(SimpleAudioPlayer laserSound) {
+        this.laserSound = laserSound;
+    }
+
+    public SimpleAudioPlayer getLaserSound() {
+        return laserSound;
+    }
 }
