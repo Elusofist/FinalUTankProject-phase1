@@ -16,6 +16,8 @@ public class Window extends JFrame {
     RulesMenu rulesMenu;
     KeyboardMenu keyboardMenu;
     Game game;
+    MiddleGameMenu middleGameMenu;
+    static final int WIDTH = 800, HEIGHT = 800;
 
     private Window(){
         super();
@@ -55,5 +57,14 @@ public class Window extends JFrame {
 
         this.keyboardMenu = keyboardMenu;
         this.add(keyboardMenu);
+    }
+
+    public void setMiddleGameMenu(MiddleGameMenu middleGameMenu){
+        if(this.middleGameMenu != null)
+            this.remove(this.middleGameMenu);
+
+
+        this.middleGameMenu = middleGameMenu;
+        this.add(middleGameMenu);
     }
 }

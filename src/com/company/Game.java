@@ -53,7 +53,7 @@ public class Game extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 Window.getInstance().game.setVisible(false);
 
-                Window.getInstance().mainMenu.setVisible(true);
+                Window.getInstance().middleGameMenu.setVisible(true);
 
             }
 
