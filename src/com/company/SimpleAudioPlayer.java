@@ -6,11 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 
 public class SimpleAudioPlayer
 {
@@ -38,36 +34,50 @@ public class SimpleAudioPlayer
         // create clip reference
         clip = AudioSystem.getClip();
 
+        // to close the clip when it's not running
+        clip.addLineListener(myLineEvent -> {
+            if (myLineEvent.getType() == LineEvent.Type.STOP)
+                clip.close();
+        });
+
         // open audioInputStream to the clip
         clip.open(audioInputStream);
 
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+//        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-//    public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-//
-//            String filePath = "buttonBeep.wav";
-//            SimpleAudioPlayer audioPlayer =
-//                    new SimpleAudioPlayer(filePath);
-//
-//            audioPlayer.play();
-//            Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) {
 
-//            while (true)
-//            {
-//                System.out.println("1. pause");
-//                System.out.println("2. resume");
-//                System.out.println("3. restart");
-//                System.out.println("4. stop");
-//                System.out.println("5. Jump to specific time");
-//                int c = sc.nextInt();
-//                audioPlayer.gotoChoice(3);
-//                if (c == 4)
-//                    break;
-//            }
-//            sc.close();
+        SimpleAudioPlayer laser = null;
+        try {
+            laser = new SimpleAudioPlayer("laser.wav");
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        laser.play();
 
-//    }
+//
+////            Scanner sc = new Scanner(System.in);
+//
+////            while (true)
+////            {
+////                System.out.println("1. pause");
+////                System.out.println("2. resume");
+////                System.out.println("3. restart");
+////                System.out.println("4. stop");
+////                System.out.println("5. Jump to specific time");
+////                int c = sc.nextInt();
+////                audioPlayer.gotoChoice(3);
+////                if (c == 4)
+////                    break;
+////            }
+////            sc.close();
+//
+    }
 
     // Work as the user enters his choice
 
@@ -182,7 +192,17 @@ public class SimpleAudioPlayer
         audioInputStream = AudioSystem.getAudioInputStream(
                 new File(this.filePath).getAbsoluteFile());
         clip.open(audioInputStream);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+//        clip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    static public void playButtonBeep() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        SimpleAudioPlayer beep = new SimpleAudioPlayer("buttonBeep.wav");
+        beep.play();
+    }
+
+    static void playGunShoot() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        SimpleAudioPlayer beep = new SimpleAudioPlayer("buttonBeep.wav");
+        beep.play();
     }
 
 }

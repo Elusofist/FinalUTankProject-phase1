@@ -1,10 +1,12 @@
 package com.company;
 
-
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +113,16 @@ public class Game extends JPanel {
             if (p1Tank.powerUpShape == null) {
                 if (player1.ammo > 0) {
                     if (!prevP1Fire) {
+
+                        SimpleAudioPlayer gunShoot = null;
+                        try {
+                            String filePath = "zert" + (int) Math.floor(Math.random()*3) + ".wav";
+                            gunShoot = new SimpleAudioPlayer(filePath);
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                            e.printStackTrace();
+                        }
+                        gunShoot.play();
+
                         Shot s = new Shot(p1Tank.getGunX(), p1Tank.getGunY(), p1Tank.getDirection());
                         this.shotsInTheAir.add(s);
                         player1.ammo--;
@@ -127,6 +139,16 @@ public class Game extends JPanel {
                 }
                 else if (p1Tank.powerUpShape instanceof LaserShape){
                     p1Tank.laser.isEmitting = true;
+                    if (! prevP1Fire){
+                        SimpleAudioPlayer laserSound = null;
+                        try {
+                            laserSound = new SimpleAudioPlayer("laser.wav");
+                            p1Tank.setLaserSound(laserSound);
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                            e.printStackTrace();
+                        }
+                        laserSound.play();
+                    }
                 }
             }
         }
@@ -134,6 +156,9 @@ public class Game extends JPanel {
             if (p1Tank.powerUpShape != null){
                 if (p1Tank.powerUpShape instanceof LaserShape){
                     p1Tank.laser.isEmitting = false;
+
+                    if (prevP1Fire)
+                        p1Tank.getLaserSound().pause();
                 }
             }
         }
@@ -159,6 +184,15 @@ public class Game extends JPanel {
             if (p2Tank.powerUpShape == null) {
                 if (player2.ammo > 0) {
                     if (!prevP2Fire) {
+                        SimpleAudioPlayer gunShoot = null;
+                        try {
+                            gunShoot = new SimpleAudioPlayer(
+                                    "pium" + (int) Math.floor(Math.random()*2) + ".wav");
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                            e.printStackTrace();
+                        }
+                        gunShoot.play();
+
                         Shot s = new Shot(p2Tank.getGunX(), p2Tank.getGunY(), p2Tank.getDirection());
                         this.shotsInTheAir.add(s);
                         player2.ammo--;
@@ -175,6 +209,16 @@ public class Game extends JPanel {
                 }
                 else if (p2Tank.powerUpShape instanceof LaserShape){
                     p2Tank.laser.isEmitting = true;
+                    if (! prevP2Fire){
+                        SimpleAudioPlayer laserSound = null;
+                        try {
+                            laserSound = new SimpleAudioPlayer("laser.wav");
+                            p2Tank.setLaserSound(laserSound);
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                            e.printStackTrace();
+                        }
+                        laserSound.play();
+                    }
                 }
             }
         }
@@ -182,6 +226,9 @@ public class Game extends JPanel {
             if (p2Tank.powerUpShape != null){
                 if (p2Tank.powerUpShape instanceof LaserShape){
                     p2Tank.laser.isEmitting = false;
+
+                    if (prevP2Fire)
+                        p2Tank.getLaserSound().pause();
                 }
             }
         }
@@ -211,7 +258,7 @@ public class Game extends JPanel {
                 shot.kill();
                 this.everything.remove(this.player1.getTank());
                 this.modifyRandomTank(p1Tank, p2Tank);
-                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
+                this.player1.newRound(false, p1Tank.x, p1Tank.y);
                 this.everything.add(this.player1.getTank());
                 this.player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
@@ -259,8 +306,10 @@ public class Game extends JPanel {
         this.lasers.forEach(Laser::growOld);
 
         for (Laser laser: lasers) {
-            if (laser.age <= 0)
+            if (laser.age <= 0) {
+                (laser.owner).getLaserSound().pause();
                 (laser.owner).powerUpShape = null;
+            }
         }
 
         this.shotsInTheAir.removeIf(Shot::isDead);

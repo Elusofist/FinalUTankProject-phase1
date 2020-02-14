@@ -1,20 +1,35 @@
 package com.company;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class MainMenu extends JPanel {
 
 
-    public MainMenu() {
+    public MainMenu(){
 
         JButton start = new JButton("Start");
         this.add(start);
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
 
                 Window frame = Window.getInstance();
                 MainMenu.super.setVisible(false);
@@ -47,6 +62,19 @@ public class MainMenu extends JPanel {
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
+
                 // what to do here;
                 Window frame = Window.getInstance();
                 frame.dispose();
@@ -58,6 +86,19 @@ public class MainMenu extends JPanel {
         rules.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
+
                 MainMenu.super.setVisible(false);
                 Window.getInstance().rulesMenu.setVisible(true);
             }
@@ -69,6 +110,19 @@ public class MainMenu extends JPanel {
         showData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                SimpleAudioPlayer beep = null;
+                try {
+                    beep = new SimpleAudioPlayer("buttonBeep.wav");
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                }
+                beep.play();
+
                 Data.getInstance().show();
             }
         });
