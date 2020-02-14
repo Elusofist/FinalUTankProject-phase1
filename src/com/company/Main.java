@@ -4,16 +4,14 @@ import javax.swing.*;
 
 public class Main {
 
-    final static int WIDTH = 800;
-    final static int HEIGHT = 800;
 
     public static void main(String[] args) {
 
         MainMenu mainMenu = new MainMenu();
-        mainMenu.setSize(WIDTH,HEIGHT);
+        mainMenu.setSize(Game.WIDTH,Game.HEIGHT);
 
         Window frame = Window.getInstance();
-        frame.setSize(WIDTH,HEIGHT);
+        frame.setSize(Game.WIDTH,Game.HEIGHT);
         frame.addKeyListener(new GameActionListener());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -24,14 +22,9 @@ public class Main {
 
 
         RulesMenu rulesMenu = new RulesMenu();
-        rulesMenu.setSize(WIDTH,HEIGHT);
+        rulesMenu.setSize(Game.WIDTH,Game.HEIGHT);
         rulesMenu.setVisible(false);
         frame.setRulesMenu(rulesMenu);
-
-//        KeyboardMenu keyboardMenu = new KeyboardMenu();
-//        keyboardMenu.setSize(WIDTH,HEIGHT);
-//        keyboardMenu.setVisible(false);
-//        frame.setKeyboardMenu(keyboardMenu);
 
         frame.setVisible(true);
     }

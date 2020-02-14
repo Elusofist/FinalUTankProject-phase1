@@ -22,7 +22,7 @@ public class MainMenu extends JPanel {
 
                 Game game = new Game();
                 frame.setGame(game);
-                game.setSize(700, 700);
+                game.setSize(Game.WIDTH, Game.HEIGHT);
                 game.setVisible(true);
                 game.setFocusable(true);
                 game.requestFocusInWindow();

@@ -22,13 +22,16 @@ public class Data {
     // Up, Down, Left, Right, Fire
     private List<Integer> p1Keyboard;
     private List<Integer> p2Keyboard;
+
     private boolean isMapPredesigned;
+    private MapLevel mapLevel;
 
 
     Data() {
         // Default settings
         isMapPredesigned = true;
-        map = new Map(MapLevel.EASY);
+        mapLevel = MapLevel.EASY;
+        map = new Map(MapLevel.EASY, true);
         shotPerRound = 20;
         roundsToWin = 5;
         p1Keyboard = new ArrayList<>();
@@ -59,21 +62,27 @@ public class Data {
         this.roundsToWin = roundsToWin;
     }
 
-    public void setMap(MapLevel mapName) {
-        switch (mapName) {
-            case EASY:
-                if (isMapPredesigned)
-                    this.map = new Map(MapLevel.EASY);
-                break;
-            case MEDIUM:
-                if (isMapPredesigned)
-                    this.map = new Map(MapLevel.MEDIUM);
-                break;
-            case HARD:
-                if (isMapPredesigned)
-                    this.map = new Map(MapLevel.HARD);
-                break;
+    public void setMap(String mapName, boolean isMapPredesigned) {
+        this.isMapPredesigned = isMapPredesigned;
+        if (mapName == "Easy"){
+            this.mapLevel = MapLevel.EASY;
+            this.map = new Map(MapLevel.EASY, isMapPredesigned);
         }
+
+        else if (mapName == "Medium") {
+            this.mapLevel = MapLevel.MEDIUM;
+            this.map = new Map(MapLevel.MEDIUM, isMapPredesigned);
+        }
+
+        else if (mapName == "Hard") {
+            this.mapLevel = MapLevel.HARD;
+            this.map = new Map(MapLevel.HARD, isMapPredesigned);
+        }
+
+    }
+
+    public void modifyMap(){
+        this.map = new Map(this.mapLevel, this.isMapPredesigned);
     }
 
     public void setP2Keyboard(List<Integer> p2Keyboard) {
@@ -112,5 +121,13 @@ public class Data {
 
     public void setMapPredesigned(boolean mapPredesigned) {
         isMapPredesigned = mapPredesigned;
+    }
+
+    public MapLevel getMapLevel() {
+        return mapLevel;
+    }
+
+    public boolean getIsMapPredesigned() {
+        return isMapPredesigned;
     }
 }

@@ -4,22 +4,39 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+class Map {
+    private List<Wall> walls;
 
-class Map{
-    private List<Wall> walls = new ArrayList<>();
+    Map (MapLevel level, boolean isPredesigned) {
 
-    Map (MapLevel level) {
         super();
-        switch (level) {
-            case EASY:
-                easyMapDesigner(walls);
-                break;
-            case MEDIUM:
-                mediumMapDesigner(walls);
-                break;
-            case HARD:
-                hardMapDesigner(walls);
-                break;
+        this.walls = new ArrayList<>();
+
+        if (isPredesigned) {
+            switch (level) {
+                case EASY:
+                    easyMapDesigner(walls);
+                    break;
+                case MEDIUM:
+                    mediumMapDesigner(walls);
+                    break;
+                case HARD:
+                    hardMapDesigner(walls);
+                    break;
+            }
+        }
+        else {
+            switch (level) {
+                case EASY:
+                    easyRandomMapGenerator(walls);
+                    break;
+                case MEDIUM:
+                    mediumRandomMapGenerator(walls);
+                    break;
+                case HARD:
+                    hardRandomMapGenerator(walls);
+                    break;
+            }
         }
     }
 
@@ -115,5 +132,39 @@ class Map{
 
     void draw(Graphics graphics) {
         walls.forEach(wall -> wall.draw(graphics));
+    }
+
+
+    void easyRandomMapGenerator(List<Wall> walls) {
+        walls.add(new Wall(0,0, 800, false));
+        walls.add(new Wall(0,0, 800, true));
+        walls.add(new Wall(0,794,800, false));
+        walls.add(new Wall(794, 0, 800, true));
+        for (int i = 0; i < 5; i++) {
+            walls.add(new Wall((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), (int) (Math.random() * Game.HEIGHT), true));
+            walls.add(new Wall((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), (int) (Math.random() * Game.WIDTH), false));
+        }
+    }
+
+    void mediumRandomMapGenerator(List<Wall> walls) {
+        walls.add(new Wall(0,0, 800, false));
+        walls.add(new Wall(0,0, 800, true));
+        walls.add(new Wall(0,794,800, false));
+        walls.add(new Wall(794, 0, 800, true));
+        for (int i = 0; i < 10; i++) {
+            walls.add(new Wall((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), (int) (Math.random() * Game.HEIGHT), true));
+            walls.add(new Wall((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), (int) (Math.random() * Game.WIDTH), false));
+        }
+    }
+
+    void hardRandomMapGenerator(List<Wall> walls) {
+        walls.add(new Wall(0,0, 800, false));
+        walls.add(new Wall(0,0, 800, true));
+        walls.add(new Wall(0,794,800, false));
+        walls.add(new Wall(794, 0, 800, true));
+        for (int i = 0; i < 15; i++) {
+            walls.add(new Wall((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), (int) (Math.random() * Game.HEIGHT), true));
+            walls.add(new Wall((int) (Math.random() * Game.WIDTH), (int) (Math.random() * Game.HEIGHT), (int) (Math.random() * Game.WIDTH), false));
+        }
     }
 }
