@@ -92,14 +92,7 @@ public class Game extends JPanel {
 
     void listenedActionHandler(GameActionListener listener, Tank p1Tank, Tank p2Tank) {
         if (listener.p1Move) {
-            p1Tank.changeVelocity();
-//            p1Tank.step();
-//            if (p1Tank.contacts(p2Tank)
-//                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-//                p1Tank.addPIToDirection();
-//                p1Tank.step();
-//                p1Tank.addPIToDirection();
-//            }
+            p1Tank.velocityInc();
         }
 
         if (listener.p1Left) {
@@ -111,16 +104,7 @@ public class Game extends JPanel {
         }
 
         if (listener.p1Down) {
-            p1Tank.changeVelocity();
-            p1Tank.addPIToDirection();
-//            p1Tank.step();
-//            if (p1Tank.contacts(p2Tank)
-//                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-//                p1Tank.changeVelocity();
-//                p1Tank.addPIToDirection();
-//                p1Tank.step();
-//                p1Tank.addPIToDirection();
-//            }
+            p1Tank.velocityDec();
         }
 
         if (listener.p1Fire) {
@@ -156,9 +140,7 @@ public class Game extends JPanel {
         prevP1Fire = listener.p1Fire;
 
         if (listener.p2Move) {
-            p2Tank.changeVelocity();
-//            p2Tank.step();
-//
+            p2Tank.velocityInc();
         }
 
         if (listener.p2Left) {
@@ -170,14 +152,11 @@ public class Game extends JPanel {
         }
 
         if (listener.p2Down) {
-            p2Tank.changeVelocity();
-            p1Tank.addPIToDirection();
-//            p1Tank.step();
-//
+            p2Tank.velocityDec();
         }
 
-        if(!listener.p1Move && !listener.p1Down) p1Tank.changeNegVelocity();
-        if(!listener.p2Down && !listener.p2Move) p2Tank.changeNegVelocity();
+        if(!listener.p1Move && !listener.p1Down) p1Tank.speedDown();
+        if(!listener.p2Down && !listener.p2Move) p2Tank.speedDown();
 
         if (listener.p2Fire) {
             if (p2Tank.powerUpShape == null) {

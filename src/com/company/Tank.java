@@ -14,7 +14,7 @@ public class Tank extends MovingThing {
     Laser laser = null;
 
     Tank(int x, int y, double d) {
-        super(x, y, d, 2.0F);
+        super(x, y, d, 0.06f);
     }
 
     public void setPowerUp(PowerUp powerUp) {

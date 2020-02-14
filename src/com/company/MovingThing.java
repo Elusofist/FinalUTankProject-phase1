@@ -52,8 +52,25 @@ public abstract class MovingThing extends Thing {
         this.y = (int)((long)this.y + Math.round((double)this.velocity * Math.cos(this.direction)));
     }
 
-//    void negStep() {
-//        this.x -= Math.round(this.velocity * Math.sin(this.direction));
-//        this.y -= Math.round(this.velocity * Math.cos(this.direction));
-//    }
+    public void velocityInc(){
+        // ta vaqti ke v az max kamtare, ye meqdar e xassi ziadesh mikone
+        if (this.velocity < 10) {
+            this.velocity+= 0.5;
+        }
+    }
+
+    public void velocityDec(){
+        // ta vaqti ke v az min bishtare, ye meqdar e xassi kamesh mikone
+        if (this.velocity > -10) {
+            this.velocity-= 0.5;
+        }
+    }
+
+    public void speedDown(){
+        // andaze ye sor'at ro kam mikone; che sor'at mosbat bashe, che manfi
+        if (this.velocity < 0)
+            this.velocity += 0.2;
+        else if (this.velocity > 0)
+            this.velocity-= 0.2;
+    }
 }
