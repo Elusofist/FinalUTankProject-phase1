@@ -13,7 +13,7 @@ public class Shot extends MovingThing {
     int age = LIFE;
 
     Shot(int x, int y, double d) {
-        super(x, y, d, 1, 5);
+        super(x, y, d, 1, 1.5f);
     }
 
     @Override
@@ -39,5 +39,6 @@ public class Shot extends MovingThing {
 
     void bounceAgainst(Wall wall) {
         this.direction = (wall.isVertical ? 0 : Math.PI) - this.direction;
+        this.calculateVelocity();
     }
 }

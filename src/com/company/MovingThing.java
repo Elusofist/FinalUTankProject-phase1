@@ -6,9 +6,10 @@ package com.company;
 //
 
 public abstract class MovingThing extends Thing {
-    private final static float MAX_VEL = 10, THRUST_ACC = 0.5f, FRICTION_ACC = 0.2f;
+    private final static float MAX_VEL = 7, THRUST_ACC = 0.3f, FRICTION_ACC = 0.2f;
     double direction;
     float velocity;
+    float vX, vY;
     float angularVelocity;
 
     MovingThing(int x, int y, double d, float a, float v0) {
@@ -16,6 +17,7 @@ public abstract class MovingThing extends Thing {
         this.velocity = v0;
         this.angularVelocity = a;
         this.direction = d;
+        this.calculateVelocity();
     }
 
     public void changeVelocity() {
@@ -32,6 +34,7 @@ public abstract class MovingThing extends Thing {
 
     private void changeDirection(double amount) {
         this.direction = (this.direction + amount) % 6.283185307179586D;
+        this.calculateVelocity();
     }
 
     public void addPIToDirection() {
@@ -48,9 +51,24 @@ public abstract class MovingThing extends Thing {
 
     abstract int getRadius();
 
+    void calculateVelocity() {
+        this.vX = Math.round(this.velocity * Math.sin(this.direction));
+        this.vY = Math.round(this.velocity * Math.cos(this.direction));
+    }
+
+    void blocked(Wall wall) {
+        if (wall.isVertical) {
+            if ((this.x <= wall.j && this.vX > 0) || (this.x >= wall.j && this.vX < 0))
+                this.vX = 0;
+        } else {
+            if ((this.y <= wall.j && this.vY > 0) || (this.y >= wall.j && this.vY < 0))
+                this.vY = 0;
+        }
+    }
+
     void step() {
-        this.x = (int)((long)this.x + Math.round((double)this.velocity * Math.sin(this.direction)));
-        this.y = (int)((long)this.y + Math.round((double)this.velocity * Math.cos(this.direction)));
+        this.x += this.vX;
+        this.y += this.vY;
     }
 
     public void velocityInc(){
@@ -58,6 +76,7 @@ public abstract class MovingThing extends Thing {
         if (this.velocity < MAX_VEL) {
             this.velocity+= THRUST_ACC;
         }
+        this.calculateVelocity();
     }
 
     public void velocityDec(){
@@ -65,18 +84,16 @@ public abstract class MovingThing extends Thing {
         if (this.velocity > - MAX_VEL) {
             this.velocity-= THRUST_ACC;
         }
+        this.calculateVelocity();
     }
 
     public void speedDown(){
         // andaze ye sor'at ro kam mikone; che sor'at mosbat bashe, che manfi
         if (this.velocity < 0)
-            this.velocity += THRUST_ACC;
+            this.velocity += FRICTION_ACC;
         else if (this.velocity > 0)
-            this.velocity-= THRUST_ACC;
-    }
+            this.velocity-= FRICTION_ACC;
 
-    void negStep() {
-        this.x -= Math.round(this.velocity * Math.sin(this.direction));
-        this.y -= Math.round(this.velocity * Math.cos(this.direction));
+        this.calculateVelocity();
     }
 }
