@@ -66,12 +66,12 @@ public class RulesMenu extends JPanel {
         JLabel mapLabel = new JLabel("Choose Map: ");
         this.add(mapLabel);
 
-        String[] names = {"Easy", "Medium", "Hard"};
+        MapLevel[] names = {MapLevel.EASY, MapLevel.MEDIUM, MapLevel.HARD};
         JComboBox mapLevelSetter = new JComboBox(names);
         this.add(mapLevelSetter);
         mapLevelSetter.addActionListener(actionEvent -> {
             JComboBox cb = (JComboBox) actionEvent.getSource();
-            String mapName = (String) cb.getSelectedItem();
+            MapLevel mapName = (MapLevel) cb.getSelectedItem();
             Data.getInstance().setMap(mapName, Data.getInstance().getIsMapPredesigned());
         });
 

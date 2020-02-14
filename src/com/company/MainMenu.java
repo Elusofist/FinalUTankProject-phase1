@@ -1,17 +1,22 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenu extends JPanel {
-
+    MiddleGameMenu middleGameMenu;
 
     public MainMenu() {
 
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        JPanel buttonCenter = new JPanel(new GridBagLayout());
+        buttonCenter.setBorder(new EmptyBorder(300, 0, 0, 0));
+
         JButton start = new JButton("Start");
-        this.add(start);
+        buttonPanel.add(start);
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -43,7 +48,7 @@ public class MainMenu extends JPanel {
 
 
         JButton quit = new JButton("Quit");
-        this.add(quit);
+        buttonPanel.add(quit);
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -54,7 +59,7 @@ public class MainMenu extends JPanel {
         });
 
         JButton rules = new JButton("Rules");
-        this.add(rules);
+        buttonPanel.add(rules);
         rules.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -65,12 +70,15 @@ public class MainMenu extends JPanel {
 
 
         JButton showData = new JButton("Show Data");
-        this.add(showData);
+        buttonPanel.add(showData);
         showData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Data.getInstance().show();
             }
         });
+
+        buttonCenter.add(buttonPanel);
+        this.add(buttonCenter, BorderLayout.LINE_END);
     }
 }

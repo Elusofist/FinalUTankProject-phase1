@@ -62,21 +62,21 @@ public class Data {
         this.roundsToWin = roundsToWin;
     }
 
-    public void setMap(String mapName, boolean isMapPredesigned) {
+    public void setMap(MapLevel mapName, boolean isMapPredesigned) {
         this.isMapPredesigned = isMapPredesigned;
-        if (mapName == "Easy"){
-            this.mapLevel = MapLevel.EASY;
-            this.map = new Map(MapLevel.EASY, isMapPredesigned);
-        }
-
-        else if (mapName == "Medium") {
-            this.mapLevel = MapLevel.MEDIUM;
-            this.map = new Map(MapLevel.MEDIUM, isMapPredesigned);
-        }
-
-        else if (mapName == "Hard") {
-            this.mapLevel = MapLevel.HARD;
-            this.map = new Map(MapLevel.HARD, isMapPredesigned);
+        switch (mapName) {
+            case EASY:
+                this.mapLevel = MapLevel.EASY;
+                this.map = new Map(MapLevel.EASY, isMapPredesigned);
+                break;
+            case MEDIUM:
+                this.mapLevel = MapLevel.MEDIUM;
+                this.map = new Map(MapLevel.MEDIUM, isMapPredesigned);
+                break;
+            case HARD:
+                this.mapLevel = MapLevel.HARD;
+                this.map = new Map(MapLevel.HARD, isMapPredesigned);
+                break;
         }
 
     }
