@@ -3,15 +3,13 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game extends JPanel {
     static final int WIDTH = 800, HEIGHT = 800;
     int WIN_POINT;
-    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000, FRAGBOMB_INTERVAL = 500;
+    private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000, FRAGBOMB_INTERVAL = 500, STANDARD_TANKS_DISTANCE = 5;
     static int time;
 
     List<Thing> everything = new ArrayList();
@@ -48,14 +46,10 @@ public class Game extends JPanel {
         akbar.setVisible(true);
         this.add(akbar);
 
-        akbar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Window.getInstance().game.setVisible(false);
+        akbar.addActionListener(actionEvent -> {
+            Window.getInstance().game.setVisible(false);
 
-                Window.getInstance().middleGameMenu.setVisible(true);
-
-            }
+            Window.getInstance().middleGameMenu.setVisible(true);
 
         });
 
@@ -108,12 +102,14 @@ public class Game extends JPanel {
             p1Tank.velocityDec();
         }
 
+        if (p1Tank.contacts(p2Tank)) {
+            p1Tank.x -= STANDARD_TANKS_DISTANCE;
+            p1Tank.y -= STANDARD_TANKS_DISTANCE;
+        }
+
         boolean shotFragBombInTheAir1 = false;
         for (ShotFragBomb shotFragBomb: shotFragBombs){
-            if (shotFragBomb.age>0)
-                shotFragBombInTheAir1 = true;
-            else
-                shotFragBombInTheAir1 = false;
+            shotFragBombInTheAir1 = shotFragBomb.age > 0;
         }
 
         if (listener.p1Fire && !this.prevP1Fire&& shotFragBombInTheAir1){
@@ -186,12 +182,14 @@ public class Game extends JPanel {
             p2Tank.velocityDec();
         }
 
+        if (p1Tank.contacts(p2Tank)) {
+            p2Tank.x -= STANDARD_TANKS_DISTANCE;
+            p2Tank.y -= STANDARD_TANKS_DISTANCE;
+        }
+
         boolean shotFragBombInTheAir2 =false;
         for (ShotFragBomb shotFragBomb: shotFragBombs){
-            if (shotFragBomb.age>0)
-                shotFragBombInTheAir2=true;
-            else
-                shotFragBombInTheAir2 = false;
+            shotFragBombInTheAir2= shotFragBomb.age > 0;
         }
         if (listener.p2Fire && !this.prevP2Fire&& shotFragBombInTheAir2){
             for (ShotFragBomb shotFragBomb: shotFragBombs){
@@ -271,7 +269,7 @@ public class Game extends JPanel {
                 shot.kill();
                 this.everything.remove(this.player1.getTank());
                 this.modifyRandomTank(p1Tank, p2Tank);
-                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
+                this.player1.newRound(false, p1Tank.x, p1Tank.y);
                 this.everything.add(this.player1.getTank());
                 this.player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
@@ -303,7 +301,7 @@ public class Game extends JPanel {
                 shotFragBomb.kill();
                 this.everything.remove(this.player1.getTank());
                 this.modifyRandomTank(p1Tank, p2Tank);
-                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
+                this.player1.newRound(false, p1Tank.x, p1Tank.y);
                 this.everything.add(this.player1.getTank());
                 this.player2.newRound(true, Math.random() * 700.0D, Math.random() * 700.0D);
             }
