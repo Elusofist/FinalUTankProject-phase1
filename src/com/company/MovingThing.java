@@ -6,23 +6,18 @@ package com.company;
 //
 
 public abstract class MovingThing extends Thing {
+    private final static float MAX_VEL = 7, THRUST_ACC = 0.3f, FRICTION_ACC = 0.2f;
     double direction;
     float velocity;
+    float vX, vY;
     float angularVelocity;
 
-    MovingThing(int x, int y, double d, float a) {
+    MovingThing(int x, int y, double d, float a, float v0) {
         super(x, y);
-        this.velocity = 0;
+        this.velocity = v0;
         this.angularVelocity = a;
         this.direction = d;
-    }
-
-    MovingThing(int x, int y, double d, float a, float v){
-        super(x, y);
-        this.velocity = 0;
-        this.angularVelocity = a;
-        this.direction = d;
-        this.velocity = v;
+        this.calculateVelocity();
     }
 
     public void changeVelocity() {
@@ -30,7 +25,6 @@ public abstract class MovingThing extends Thing {
             this.velocity++;
         }
     }
-
 
     public void changeNegVelocity() {
         if (this.velocity > 0) {
@@ -40,32 +34,11 @@ public abstract class MovingThing extends Thing {
 
     private void changeDirection(double amount) {
         this.direction = (this.direction + amount) % 6.283185307179586D;
+        this.calculateVelocity();
     }
 
     public void addPIToDirection() {
         this.direction += Math.PI;
-    }
-
-    public void velocityInc(){
-        // ta vaqti ke v az max kamtare, ye meqdar e xassi ziadesh mikone
-        if (this.velocity < 10) {
-            this.velocity+= 0.5;
-        }
-    }
-
-    public void velocityDec(){
-        // ta vaqti ke v az min bishtare, ye meqdar e xassi kamesh mikone
-        if (this.velocity > -10) {
-            this.velocity-= 0.5;
-        }
-    }
-
-    public void speedDown(){
-        // andaze ye sor'at ro kam mikone; che sor'at mosbat bashe, che manfi
-        if (this.velocity < 0)
-            this.velocity += 0.2;
-        else if (this.velocity > 0)
-            this.velocity-= 0.2;
     }
 
     public void turnLeft() {
@@ -78,13 +51,49 @@ public abstract class MovingThing extends Thing {
 
     abstract int getRadius();
 
-    void step() {
-        this.x = (int)((long)this.x + Math.round((double)this.velocity * Math.sin(this.direction)));
-        this.y = (int)((long)this.y + Math.round((double)this.velocity * Math.cos(this.direction)));
+    void calculateVelocity() {
+        this.vX = Math.round(this.velocity * Math.sin(this.direction));
+        this.vY = Math.round(this.velocity * Math.cos(this.direction));
     }
 
-    void negStep() {
-        this.x -= Math.round(this.velocity * Math.sin(this.direction));
-        this.y -= Math.round(this.velocity * Math.cos(this.direction));
+    void blocked(Wall wall) {
+        if (wall.isVertical) {
+            if ((this.x <= wall.j && this.vX > 0) || (this.x >= wall.j && this.vX < 0))
+                this.vX = 0;
+        } else {
+            if ((this.y <= wall.j && this.vY > 0) || (this.y >= wall.j && this.vY < 0))
+                this.vY = 0;
+        }
+    }
+
+    void step() {
+        this.x += this.vX;
+        this.y += this.vY;
+    }
+
+    public void velocityInc(){
+        // ta vaqti ke v az max kamtare, ye meqdar e xassi ziadesh mikone
+        if (this.velocity < MAX_VEL) {
+            this.velocity+= THRUST_ACC;
+        }
+        this.calculateVelocity();
+    }
+
+    public void velocityDec(){
+        // ta vaqti ke v az min bishtare, ye meqdar e xassi kamesh mikone
+        if (this.velocity > - MAX_VEL) {
+            this.velocity-= THRUST_ACC;
+        }
+        this.calculateVelocity();
+    }
+
+    public void speedDown(){
+        // andaze ye sor'at ro kam mikone; che sor'at mosbat bashe, che manfi
+        if (this.velocity < 0)
+            this.velocity += FRICTION_ACC;
+        else if (this.velocity > 0)
+            this.velocity-= FRICTION_ACC;
+
+        this.calculateVelocity();
     }
 }

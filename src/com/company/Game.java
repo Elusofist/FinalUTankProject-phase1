@@ -3,6 +3,8 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +14,14 @@ public class Game extends JPanel {
     private final static int MINE_INTERVAL = 500, LASER_INTERVAL = 1000;
     static int time;
 
-    List<Thing> everything = new ArrayList<>();
+    List<Thing> everything = new ArrayList();
     Player player1 = new Player();
     Player player2 = new Player();
-    List<Shot> shotsInTheAir = new ArrayList<>();
+    List<Shot> shotsInTheAir = new ArrayList();
     List<PowerUp> powerUps = new ArrayList<>();
     List<Mine> mines = new ArrayList<>();
     List<Laser> lasers = new ArrayList<>();
-    ScoreBoard scoreBoard = new ScoreBoard(Game.WIDTH / 2 - 20, Game.HEIGHT - 45);
+    ScoreBoard scoreBoard = new ScoreBoard(Game.WIDTH / 2 - 20, Game.HEIGHT - 40);
 
     boolean prevP1Fire = false, prevP2Fire = false, p1Won = false, p2Won = false;
     Map map;
@@ -45,10 +47,14 @@ public class Game extends JPanel {
         akbar.setVisible(true);
         this.add(akbar);
 
-        akbar.addActionListener(actionEvent -> {
-            Window.getInstance().game.setVisible(false);
+        akbar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Window.getInstance().game.setVisible(false);
 
-            Window.getInstance().mainMenu.setVisible(true);
+                Window.getInstance().mainMenu.setVisible(true);
+
+            }
 
         });
 
@@ -68,7 +74,6 @@ public class Game extends JPanel {
         } while (result);
     }
 
-
     void firstlyModifyRandomTank(Tank p1Tank, Tank p2Tank) {
         boolean result;
         do {
@@ -86,16 +91,8 @@ public class Game extends JPanel {
     }
 
     void listenedActionHandler(GameActionListener listener, Tank p1Tank, Tank p2Tank) {
-
         if (listener.p1Move) {
             p1Tank.velocityInc();
-//            p1Tank.step();
-//            if (p1Tank.contacts(p2Tank)
-//                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-//                p1Tank.addPIToDirection();
-//                p1Tank.step();
-//                p1Tank.addPIToDirection();
-//            }
         }
 
         if (listener.p1Left) {
@@ -108,9 +105,6 @@ public class Game extends JPanel {
 
         if (listener.p1Down) {
             p1Tank.velocityDec();
-//            p1Tank.changeVelocity();
-//            p1Tank.addPIToDirection();
-//            p1Tank.step();
         }
 
         if (listener.p1Fire) {
@@ -146,9 +140,7 @@ public class Game extends JPanel {
         prevP1Fire = listener.p1Fire;
 
         if (listener.p2Move) {
-            p2Tank.changeVelocity();
-//            p2Tank.step();
-//
+            p2Tank.velocityInc();
         }
 
         if (listener.p2Left) {
@@ -160,14 +152,8 @@ public class Game extends JPanel {
         }
 
         if (listener.p2Down) {
-            p2Tank.changeVelocity();
-            p2Tank.addPIToDirection();
-//            p1Tank.step();
-//
+            p2Tank.velocityDec();
         }
-
-        if(!listener.p1Move && !listener.p1Down) p1Tank.speedDown();
-        if(!listener.p2Down && !listener.p2Move) p2Tank.changeNegVelocity();
 
         if (listener.p2Fire) {
             if (p2Tank.powerUpShape == null) {
@@ -201,32 +187,16 @@ public class Game extends JPanel {
         }
         prevP2Fire = listener.p2Fire;
 
+        map.getWalls().stream().filter(w -> w.contacts(p1Tank)).forEach(p1Tank::blocked);
+        map.getWalls().stream().filter(w -> w.contacts(p2Tank)).forEach(p2Tank::blocked);
+
         if (time != 0) {
-
             p1Tank.step();
-            if (p1Tank.contacts(p2Tank)
-                    || map.getWalls().stream().anyMatch(w -> w.contacts(p1Tank))) {
-                p1Tank.negStep();
-            }
-
             p2Tank.step();
         }
 
-        if (p1Tank.contacts(p2Tank)
-                || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-            p2Tank.changeVelocity();
-            p2Tank.addPIToDirection();
-            p2Tank.step();
-            p2Tank.addPIToDirection();
-        }
-
-        if (p2Tank.contacts(p1Tank)
-                || map.getWalls().stream().anyMatch(w -> w.contacts(p2Tank))) {
-            p2Tank.changeNegVelocity();
-            p1Tank.addPIToDirection();
-            p1Tank.step();
-            p1Tank.addPIToDirection();
-        }
+        if(!listener.p1Move && !listener.p1Down) p1Tank.speedDown();
+        if(!listener.p2Down && !listener.p2Move) p2Tank.speedDown();
     }
 
     void movingAndContactHandler(Tank p1Tank, Tank p2Tank) {
@@ -240,19 +210,19 @@ public class Game extends JPanel {
             if (p1Tank.contacts(shot)) {
                 shot.kill();
                 this.everything.remove(this.player1.getTank());
-                this.player1.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                 this.modifyRandomTank(p1Tank, p2Tank);
+                this.player1.newRound(false, (double) p1Tank.x, (double) p1Tank.y);
                 this.everything.add(this.player1.getTank());
-                this.player2.newRound(true, 0, 0);
+                this.player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
 
             if (p2Tank.contacts(shot)) {
                 shot.kill();
                 this.everything.remove(this.player2.getTank());
-                this.player2.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                 this.modifyRandomTank(p2Tank, p1Tank);
+                this.player2.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                 this.everything.add(this.player2.getTank());
-                this.player1.newRound(true, 0,0);
+                this.player1.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
             }
         }
 
@@ -273,11 +243,11 @@ public class Game extends JPanel {
                 if (mine.foe.equals(p1Tank)) {
                     mine.kill(); // kill this shot!
                     everything.remove(player1.getTank());
-                    player1.newRound(false, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                     modifyRandomTank(p1Tank, p2Tank);
+                    player1.newRound(false, p1Tank.x, p1Tank.y);
                     everything.add(player1.getTank());
 
-                    player2.newRound(true, 0, 0);
+                    player2.newRound(true, Math.random() * Game.WIDTH, Math.random() * Game.HEIGHT);
                 }
             }
         }
